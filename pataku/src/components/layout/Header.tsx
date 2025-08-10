@@ -184,8 +184,8 @@ export default function Header({ variant = 'default', showPromoBanner = true }: 
                                 key={index}
                                 href={item.href}
                                 className={`transition-colors py-2 ${index === 0
-                                        ? 'text-gray-900 font-medium border-b border-amber-500 pb-1'
-                                        : 'text-gray-600 hover:text-gray-900'
+                                    ? 'text-gray-900 font-medium border-b border-amber-500 pb-1'
+                                    : 'text-gray-600 hover:text-gray-900'
                                     }`}
                             >
                                 {item.title}
@@ -197,4 +197,3 @@ export default function Header({ variant = 'default', showPromoBanner = true }: 
         </header>
     )
 }
-

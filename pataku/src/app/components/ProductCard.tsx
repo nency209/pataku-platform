@@ -35,7 +35,7 @@ export default function ProductCard({ name, price, originalPrice, badge, badges,
                                 variant={
                                     badge === 'SALE' ? 'sale' :
                                         badge === 'NEW' ? 'new' :
-                                            'sold'
+                                            'default'
                                 }
                                 className="text-xs"
                             >
@@ -48,7 +48,7 @@ export default function ProductCard({ name, price, originalPrice, badge, badges,
                         variant={
                             badge === 'SALE' ? 'sale' :
                                 badge === 'NEW' ? 'new' :
-                                    'sold'
+                                    'default'
                         }
                         className="absolute top-2 left-2 text-xs"
                     >

@@ -146,4 +146,3 @@ export const serviceGuarantees = [
         description: 'We ensure secure payment.',
     },
 ] as const
-

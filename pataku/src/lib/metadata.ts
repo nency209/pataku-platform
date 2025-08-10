@@ -114,4 +114,3 @@ export const blogPageMetadata: Metadata = generateMetadata(
     'Read our latest articles on home decor, furniture trends, and interior design tips.',
     ['blog', 'home decor tips', 'furniture trends', 'interior design', 'articles']
 )
-

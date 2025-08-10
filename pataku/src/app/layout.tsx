@@ -1,16 +1,23 @@
 import type { Metadata } from "next";
+
 import "./globals.css";
 
+
+
+
+
 export const metadata: Metadata = {
-  title: "Pataku - Online Shopping Store",
-  description: "Beautiful and luxurious decor at affordable prices",
+  title: "pataku clone",
+  description: "Shopify-like E-commerce Clone",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
-      <body className="antialiased">
+      <body >
+        <div id="app">
         {children}
+        </div>
       </body>
     </html>
   )

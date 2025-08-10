@@ -82,4 +82,3 @@ export default function Hero({ content, variant = 'default' }: HeroProps) {
         </section>
     )
 }
-

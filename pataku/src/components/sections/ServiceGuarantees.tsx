@@ -9,7 +9,7 @@ const iconMap = {
     Gift,
 }
 
-export default function ServiceGuarantees({ services = serviceGuarantees, variant = 'default' }: ServiceGuaranteesProps) {
+export default function ServiceGuarantees({ services = [...serviceGuarantees], variant = 'default' }: ServiceGuaranteesProps) {
     return (
         <section className="bg-white py-12 border-t border-gray-100">
             <div className="max-w-7xl mx-auto px-4">
@@ -39,4 +39,3 @@ export default function ServiceGuarantees({ services = serviceGuarantees, varian
         </section>
     )
 }
-

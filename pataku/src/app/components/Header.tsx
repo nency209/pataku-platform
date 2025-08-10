@@ -65,9 +65,9 @@ export default function Header() {
                             <div className="flex items-center space-x-1 cursor-pointer">
                                 <span>USD</span>
                                 <ChevronDown className="h-3 w-3" />
-                            </div>
-                        </div>
                     </div>
+                </div>
+            </div>
 
                     {/* Middle Row - Logo, Search, Cart */}
                     <div className="flex items-center justify-between py-4">
@@ -101,13 +101,13 @@ export default function Header() {
                         <div className="flex items-center space-x-4">
                             <Button variant="ghost" size="icon" className="relative">
                                 <Heart className="h-6 w-6" />
-                            </Button>
+                        </Button>
                             <Button variant="ghost" size="icon" className="relative">
                                 <ShoppingCart className="h-6 w-6" />
                                 <span className="absolute -top-1 -right-1 bg-yellow-400 text-black text-xs rounded-full h-5 w-5 flex items-center justify-center">
                                     0
                                 </span>
-                            </Button>
+                        </Button>
                             <span className="text-sm font-medium">My Cart</span>
                         </div>
                     </div>
@@ -170,11 +170,11 @@ export default function Header() {
                             <Menu className="h-6 w-6" />
                         </Button>
                     </div>
+                    </div>
                 </div>
-            </div>
 
-            {/* Mobile Navigation */}
-            {isMobileMenuOpen && (
+                {/* Mobile Navigation */}
+                {isMobileMenuOpen && (
                 <div className="md:hidden border-t border-gray-200 bg-white">
                     <nav className="flex flex-col py-4 px-4 space-y-3">
                         <a href="#" className="text-gray-900 font-medium border-b border-amber-500 pb-1">HOME</a>
@@ -183,9 +183,9 @@ export default function Header() {
                         <a href="#" className="text-gray-600 hover:text-gray-900 transition-colors py-2">PAGES</a>
                         <a href="#" className="text-gray-600 hover:text-gray-900 transition-colors py-2">BLOG</a>
                         <a href="#" className="text-gray-600 hover:text-gray-900 transition-colors py-2">CONTACT</a>
-                    </nav>
-                </div>
-            )}
+                        </nav>
+                    </div>
+                )}
         </header>
     )
 }

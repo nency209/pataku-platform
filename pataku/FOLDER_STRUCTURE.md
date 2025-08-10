@@ -199,4 +199,3 @@ public/
 - Component lazy loading
 - Code splitting by routes
 - Optimized bundle sizes
-
