@@ -1,25 +1,24 @@
-import { Metadata } from 'next'
-import { homePageMetadata } from '@/lib/metadata'
-import Header from '@/components/layout/Header'
-import Hero from './components/Hero'
-import ServiceGuarantees from './components/ServiceGuarantees'
-import FeaturedCategories from './components/FeaturedCategories'
-import NewArrivals from './components/NewArrivals'
-import PromotionalBanner from './components/PromotionalBanner'
-import BottomSections from './components/BottomSections'
-import LivingRoomBanner from './components/LivingRoomBanner'
-import TopSellingProducts from './components/TopSellingProducts'
-import BlogPosts from './components/BlogPosts'
-import Footer from './components/Footer'
+import { Metadata } from "next";
+import { homePageMetadata } from "@/lib/metadata";
+import Header from "@/app/layout/Header";
+import Hero from "@/components/sections/Hero";
+import FeaturedCategories from "@/components/sections/FeaturedCategories";
 
-export const metadata: Metadata = homePageMetadata
+import NewArrivals from "@/components/sections/NewArrivals";
+import PromotionalBanner from "@/components/sections/PromotionalBanner";
+import BottomSections from "@/components/sections/BottomSections";
+import LivingRoomBanner from "@/components/sections/LivingRoomBanner";
+import TopSellingProducts from "@/components/product/TopSellingProducts";
+import BlogPosts from "@/components/blog/BlogPosts";
+import Footer from "@/app/layout/Footer";
+
+export const metadata: Metadata = homePageMetadata;
 
 export default function Home() {
   return (
     <main className="min-h-screen bg-white">
       <Header />
       <Hero />
-      <ServiceGuarantees />
       <FeaturedCategories />
       <NewArrivals />
       <PromotionalBanner />
@@ -29,5 +28,5 @@ export default function Home() {
       <BlogPosts />
       <Footer />
     </main>
-  )
+  );
 }

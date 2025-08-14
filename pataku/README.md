@@ -5,7 +5,7 @@ A modern, fully responsive e-commerce website built with Next.js, TypeScript, an
 ## Features
 
 - **Fully Responsive Design**: Works perfectly on mobile, tablet, and desktop
-- **Modern UI Components**: Built with reusable Button, Card, and Badge components
+- **Modern UI Components**: Built with reusable button, Card, and Badge components
 - **Interactive Elements**: Hover effects, mobile menu, and smooth transitions
 - **Product Showcase**: Featured categories, new arrivals, deals, and popular products
 - **Blog Section**: Blog post previews with cards
@@ -26,7 +26,7 @@ A modern, fully responsive e-commerce website built with Next.js, TypeScript, an
 
 ## UI Components
 
-- **Button**: Multiple variants (default, black, white, ghost, link)
+- **button**: Multiple variants (default, black, white, ghost, link)
 - **Card**: For structured content display
 - **Badge**: For product status indicators (SALE, NEW, SOLD OUT)
 

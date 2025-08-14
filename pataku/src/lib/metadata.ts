@@ -1,5 +1,5 @@
 import { Metadata } from 'next'
-import { siteConfig } from './constants'
+import { siteConfig } from '@/constants'
 
 export const defaultMetadata: Metadata = {
     title: {

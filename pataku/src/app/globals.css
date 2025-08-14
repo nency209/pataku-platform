@@ -3,58 +3,140 @@
 @tailwind components;
 @tailwind utilities;
 
-@layer base {
-  :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
-    --secondary: 210 40% 96%;
-    --secondary-foreground: 222.2 84% 4.9%;
-    --muted: 210 40% 96%;
-    --muted-foreground: 215.4 16.3% 46.9%;
-    --accent: 210 40% 96%;
-    --accent-foreground: 222.2 84% 4.9%;
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
-    --radius: 0.5rem;
+/* Custom CSS Variables */
+:root {
+  /* Header1 */
+  --header1-bg:linear-gradient(to right, #d3b075 20%, #dabe91 40%, #ede8df);
+  --header-button-color: #444444;
+  --header-button-hover: #C59B6A;
+
+  --header-bg: #ffffff;
+  --header-text: #111827;
+  --header-border: #e5e7eb;
+  --header-surface: #f4f4f4;
+  --header-surface2: #ffffff;
+  
+
+  /* Text and accent colors */
+  --text-muted: #818181;
+  --header-border-color:#818181;
+  --surface3-text: #727272; /* previously --select-color */
+  --color-accent: #cea45f; /* previously --text-active-color */
+  --text-color: #f4f4f4;
+
+  /* Surfaces */
+  --surface-select: #f3f4f6; /* previously --select-bg */
+  --surface-bg: #f2f3f7;
+  --bg-feature: #f7f7f7; /* previously --feature-bg-color */
+  --bg-card-muted: #f5f5f5; /* previously --new-arravial-bg-color */
+  --border-color: #e5e7eb;
+
+  /* Typography */
+  --font-family: Rubik, sans-serif;
+
+  /* Hero */
+  --hero-title-color: #f59e0b;
+  --hero-subtitle-color: #878493;
+  --hero-description-color: #6b7280;
+  --hero-button-bg: #111827;
+  --hero-button-text: #ffffff;
+  --hero-button-hover: #374151;
+}
+
+/* Custom Tailwind utility classes using CSS variables */
+@layer utilities {
+  /* Reusable button utility bound to hero vars */
+  .bg-header1
+  {
+    background: var(--header1-bg);
+  }
+  .btn-header1:hover
+  {
+    background-color: var(--header-button-hover);
+  }
+  .btn-hero {
+    background-color: var(--hero-button-bg);
+    color: var(--hero-button-text);
+  }
+  .btn-hero:hover {
+    background-color: var(--hero-button-hover);
+  }
+  .bg-surface {
+    background-color: var(--surface-bg);
+  }
+  .text-strong {
+    color: #111827;
+  }
+  .text-muted {
+    color: #6b7280;
+  }
+  
+
+  .bg-header-button {
+    background-color: var(--header-button-color);
+  }
+  .bg-header {
+    background-color: var(--header-bg);
+  }
+  .text-header {
+    color: var(--header-text);
+  }
+  .border-header {
+    border-color: var(--header-border);
   }
 
-  .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
-    --primary: 210 40% 98%;
-    --primary-foreground: 222.2 47.4% 11.2%;
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 212.7 26.8% 83.9%;
+  .text-hero-title {
+    color: var(--hero-title-color);
+  }
+  .text-hero-subtitle {
+    color: var(--hero-subtitle-color);
+  }
+  .text-hero-description {
+    color: var(--hero-description-color);
+  }
+  .bg-hero-button {
+    background-color: var(--hero-button-bg);
+  }
+  .text-hero-button {
+    color: var(--hero-button-text);
+  }
+  .hover\:bg-hero-button-hover:hover {
+    background-color: var(--hero-button-hover);
   }
 }
 
-@layer base {
-  * {
-    @apply border-border;
-  }
-  body {
-    @apply bg-background text-foreground;
-  }
+/* Page-scoped themes using CSS variable overrides */
+.theme-home2 {
+  --surface-bg: #f2f3f7;
+  --header-surface: #f4f4f4;
+  --header-surface2: #ffffff;
+  --surface3-text: #ffffff;
+  --text-muted: #727272;
+  --header-bg: #369599;
+  --color-accent: #cea45f;
+  --hero-title-color: #d2a463;
+  --hero-button-bg: #111827;
+  --hero-button-text: #ffffff;
+  --hero-button-hover: #374151;
+  --border-color: #e5e7eb;
+}
+
+.theme-home3 {
+  --surface-bg: #f9fafb;
+  --header-surface: #eef7ed;
+  --text-muted: #4b5563;
+  --color-accent: #10b981; /* emerald */
+  --hero-title-color: #059669; /* darker emerald */
+  --hero-button-bg: #10b981;
+  --hero-button-text: #ffffff;
+  --hero-button-hover: #059669;
+  --border-color: #d1fae5;
+}
+
+.theme-home4 {
+  --header-surface: #8aabca;
+  --header-bg: #8aabca;
+  --header-surface: #8aabca;
+  --header-surface2: #8aabca;
+  --surface-bg: #8aabca;
 }

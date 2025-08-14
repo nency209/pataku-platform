@@ -1,84 +1,60 @@
-import Image from 'next/image'
-import { Button } from '@/components/ui/button'
-import { HeroProps, HeroContent } from '@/types'
-import { colors } from '@/lib/constants'
+import Image from "next/image";
+import { HeroProps, HeroContent } from "@/types";
+import ServiceGuarantees from "./ServiceGuarantees";
 
-export default function Hero({ content, variant = 'default' }: HeroProps) {
-    return (
-        <section className="bg-white py-8 md:py-16 px-4">
-            <div className="max-w-7xl mx-auto">
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
-                    {/* Left Side - Text Content */}
-                    <div className="space-y-6 text-center lg:text-left">
-                        <div className="space-y-2">
-                            <p className="text-gray-600 text-base md:text-lg">{content.subtitle}</p>
-                            <p className="text-gray-600 text-base md:text-lg">Affordable price</p>
-                        </div>
+export default function Hero({ content }: HeroProps = {}) {
+  const defaultContent: HeroContent = {
+    subtitle: "Beautiful and luxurious Decor at Affordable price",
+    title: "ACCENT ",
+    title2:" CHAIR",
+    buttonText: "SHOP NOW",
+    buttonLink: "/products",
+    image: "/slider1.jpg",
+  };
 
-                        <div className="space-y-2">
-                            <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold text-amber-500 leading-tight">
-                                {content.title.split(' ')[0]}
-                            </h1>
-                            <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold text-gray-900 leading-tight">
-                                {content.title.split(' ').slice(1).join(' ')}
-                            </h1>
-                        </div>
+  const heroContent = content || defaultContent;
 
-                        {content.description && (
-                            <p className="text-gray-600 text-base md:text-lg">
-                                {content.description}
-                            </p>
-                        )}
+  return (
+    <section className="bg-surface py-8 sm:py-12">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-16">
+        <div className="relative w-full h-[360px] sm:h-[420px] lg:h-[520px]">
+          {/* Background Image */}
+          <Image
+            src={heroContent.image}
+            alt={heroContent.title}
+            fill
+            className="object-contain"
+            priority
+          />
 
-                        <div className="pt-4">
-                            <Button
-                                size="lg"
-                                variant="black"
-                                className="w-full sm:w-auto px-8 py-3 text-base"
-                                asChild
-                            >
-                                <a href={content.buttonLink}>
-                                    {content.buttonText}
-                                </a>
-                            </Button>
-                        </div>
-                    </div>
-
-                    {/* Right Side - Product Image */}
-                    <div className="flex justify-center lg:justify-end order-first lg:order-last">
-                        <div className="relative w-full max-w-md">
-                            <div className="relative bg-white rounded-lg shadow-lg overflow-hidden">
-                                <div className="aspect-square relative">
-                                    <Image
-                                        src={content.image}
-                                        alt={content.title}
-                                        fill
-                                        className="object-cover"
-                                        priority
-                                    />
-                                </div>
-
-                                {/* Product Badge */}
-                                {content.badge && (
-                                    <div className="absolute top-4 left-4 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded">
-                                        {content.badge}
-                                    </div>
-                                )}
-                            </div>
-
-                            {/* Floating Elements */}
-                            <div className="absolute -top-4 -right-4 w-16 h-16 bg-amber-100 rounded-full opacity-50"></div>
-                            <div className="absolute -bottom-4 -left-4 w-12 h-12 bg-amber-200 rounded-full opacity-30"></div>
-
-                            {/* Pagination Dots */}
-                            <div className="flex justify-center space-x-2 mt-6">
-                                <div className="w-3 h-3 bg-amber-500 rounded-full"></div>
-                                <div className="w-3 h-3 bg-gray-300 rounded-full"></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+          {/* Text Overlay */}
+          <div className="absolute inset-0 flex items-center py-10 sm:py-16 " >
+            <div className="max-w-md sm:ml-12 lg:ml-16 " data-aos="fade-right">
+              <p className="text-hero-subtitle text-base sm:text-lg">{heroContent.subtitle}</p>
+              <h1 className="text-hero-title text-5xl sm:text-6xl lg:text-7xl font-bold leading-tight mt-2 ">
+                {heroContent.title}
+              </h1>
+               <h1 className="text-hero-title text-4xl sm:text-5xl font-semibold leading-tight mt-2">
+                {heroContent.title2}
+              </h1>
+             
+              <a
+                href={heroContent.buttonLink}
+                className="btn-hero inline-block mt-6 w-full sm:w-auto px-6 sm:px-8 py-2.5 sm:py-3 text-base sm:text-lg font-semibold rounded-lg" data-aos="fade-down"
+              >
+                {heroContent.buttonText}
+              </a>
             </div>
-        </section>
-    )
+          </div>
+        </div>
+
+        {/* Bottom Section */}
+
+          <div className="mt-6 sm:mt-8">
+            <ServiceGuarantees />
+          </div>
+      
+      </div>
+    </section>
+  );
 }
