@@ -1,25 +1,32 @@
 import { Metadata } from "next";
 import { homePageMetadata } from "@/lib/metadata";
-import Header from "@/app/layout/Header";
 
-import FeaturedCategories from "@/components/sections/FeaturedCategories";
+import {
+  Home4Hero,
+  FeaturedCategories,
+  NewArrivals,
+  PromotionalBanner,
+  BottomSections,
+  LivingRoomBanner,
+  TopSellingProducts,
+  Navbar,
+} from "@/components/sections";
 
-import NewArrivals from "@/components/sections/NewArrivals";
-import PromotionalBanner from "@/components/sections/PromotionalBanner";
-import BottomSections from "@/components/sections/BottomSections";
-import LivingRoomBanner from "@/components/sections/LivingRoomBanner";
-import TopSellingProducts from "@/components/product/TopSellingProducts";
 import BlogPosts from "@/components/blog/BlogPosts";
-import Footer from "@/app/layout/Footer";
-import Hero4Hero from "@/components/sections/Home4Hero";
+import { Footer, Header } from "@/layout";
 
 export const metadata: Metadata = homePageMetadata;
 
 export default function Home4Page() {
   return (
-    <main className="theme-home4 min-h-screen bg-white">
-      <Header />
-      <Hero4Hero />
+    <main className="theme-home4 min-h-screen">
+      <Header/>
+      <div className="sticky top-0 z-50 border border-color">
+        <div className="flex justify-center bg-navbar">
+          <Navbar />
+        </div>
+      </div>
+      <Home4Hero />
       <FeaturedCategories />
       <NewArrivals />
       <PromotionalBanner />
@@ -27,7 +34,7 @@ export default function Home4Page() {
       <LivingRoomBanner />
       <TopSellingProducts />
       <BlogPosts />
-      <Footer />
+      <Footer/>
     </main>
   );
 }

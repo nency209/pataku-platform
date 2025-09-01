@@ -1,95 +1,153 @@
 "use client";
-
-import { useState } from "react";
-import Image from "next/image";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import Image from "next/image";
+import { useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
+import { Button } from "../ui/button";
+import Link from "next/link";
+import { slides2 } from "@/constants/Hero";
 
-const slides = [
-  {
-    title: "Comfort & Practicality",
-    description: "An elegant selection of chair combining comfort & practicality",
-    image: "/img/slider8.jpg",
-    buttonText: "Shop Now",
-  },
-  {
-    title: "Modern & Stylish",
-    description: "Upgrade your home with our modern furniture collection",
-    image: "/img/chair2.png",
-    buttonText: "Explore",
-  },
-  {
-    title: "Quality & Durability",
-    description: "Furniture that lasts and stays beautiful for years",
-    image: "/img/chair3.png",
-    buttonText: "Discover",
-  },
-];
-
-export default function HeroSlider() {
-  const [current, setCurrent] = useState(0);
-
-  const nextSlide = () => setCurrent((prev) => (prev + 1) % slides.length);
-  const prevSlide = () => setCurrent((prev) => (prev - 1 + slides.length) % slides.length);
+export default function Home3Hero() {
+   const [index, setIndex] = useState(0);
+    const [lastAction, setLastAction] = useState<"next" | "prev" | null>(null);
+  
+    const nextSlide = () => {
+      setIndex((prev) => (prev + 1) % slides2.length);
+      setLastAction("next");
+    };
+  
+    const prevSlide = () => {
+      setIndex((prev) => (prev - 1 + slides2.length) % slides2.length);
+      setLastAction("prev");
+    };
+  
 
   return (
-    <section className="">
-     <div className="w-full ">
-             <div className="relative w-full h-[360px] sm:h-[420px] lg:h-[600px]">
-      {/* Background Image */}
-      <Image
-        src={slides[current].image}
-        alt={slides[current].title}
-        fill
-        priority
-        className="object-cover"
-      />
-
-      {/* Overlay for darker text visibility */}
-      <div className="absolute inset-0 "></div>
-
-      {/* Text Content */}
-      <div className="absolute left-1/2 -translate-x-3/4 inset-0 flex flex-col justify-center items-start px-8 md:px-20 text-white">
-        <p className="text-green-300 font-medium uppercase tracking-wide">
-          {slides[current].title}
-        </p>
-        <h2 className="text-3xl md:text-5xl font-bold text-black leading-snug my-4 max-w-xl">
-          {slides[current].description}
-        </h2>
-        <button className="bg-green-500 text-white px-6 py-2 rounded hover:bg-green-600 transition">
-          {slides[current].buttonText}
-        </button>
-      </div>
-
-      {/* Left Arrow */}
-      <button
-        onClick={prevSlide}
-        className="absolute left-4 top-1/2 -translate-y-1/2 bg-gray-200/80 p-2 rounded hover:bg-gray-300"
-      >
-        <ChevronLeft size={20} />
-      </button>
-
-      {/* Right Arrow */}
-      <button
-        onClick={nextSlide}
-        className="absolute right-4 top-1/2 -translate-y-1/2 bg-gray-200/80 p-2 rounded hover:bg-gray-300"
-      >
-        <ChevronRight size={20} />
-      </button>
-
-      {/* Dots */}
-      <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex space-x-2">
-        {slides.map((_, index) => (
-          <button
-            key={index}
-            onClick={() => setCurrent(index)}
-            className={`h-3 w-3 rounded-full border border-green-500 ${
-              current === index ? "bg-green-500" : "bg-white"
-            }`}
+    <section className="w-full">
+      <div className="relative overflow-hidden group">
+        <div className="relative w-full h-[280px] sm:h-[380px] md:h-[460px] lg:h-[600px]">
+          {/* Background Image */}
+          <Image
+            src={slides2[index].image}
+            alt={slides2[index].title}
+            fill
+            className="object-cover"
+            priority
           />
-        ))}
+
+          {/* Animated Content */}
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={index}
+              initial={{ opacity: 0, x: -40 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: 40 }}
+              transition={{ duration: 0.5 }}
+              className="absolute xl:top-32 xl:left-64  md:top-16 md:left-16 top-8 left-8"
+            >
+              {/* Text Content */}
+              <div className="text-center sm:text-left px-4 sm:px-8 md:px-16 xl:max-w-xl max-w-lg ">
+                <p className="text-primary text-xs sm:text-sm md:text-base font-rubik font-light uppercase">
+                  {slides2[index].title}
+                </p>
+                <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-light font-rubik my-3 sm:my-4 text-black">
+                  {slides2[index].subtitle}
+                </h2>
+                <Button
+                  asChild
+                  variant="black"
+                  size="lg"
+                  className="text-xs sm:text-sm font-normal mt-2"
+                >
+                  <Link href={slides2[index].buttonLink}>
+                    {slides2[index].buttonText}
+                  </Link>
+                </Button>
+              </div>
+            </motion.div>
+          </AnimatePresence>
+
+
+<div className="absolute xl:bottom-8  lg:bottom-16 md:bottom-14 bottom-1 left-1/2 -translate-x-1/2 flex space-x-2">
+            <button
+              onClick={prevSlide}
+              className={`w-3 h-3 sm:w-4 sm:h-4 rounded-full bg-hero ${
+                lastAction === "prev" || index === 0
+                  ? "border-2 primary-border"
+                  : "border-none"
+              }`}
+            />
+            <button
+              onClick={nextSlide}
+              className={`w-3 h-3 sm:w-4 sm:h-4 rounded-full bg-hero ${
+                lastAction === "next"
+                  ? "border-2 primary-border"
+                  : "border-none"
+              }`}
+            />
+          </div>
+
+          {/* Prev / Next Arrows */}
+          <Button
+            onClick={prevSlide}
+            variant="outline"
+            className="absolute left-3 sm:left-6 md:left-8 top-1/2 -translate-y-1/2 opacity-0 -translate-x-5 transition-all duration-500 group-hover:opacity-100 group-hover:translate-x-0"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 20 20"
+              width="18"
+              height="18"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              className="text-muted"
+            >
+              <path d="m15 18-6-6 6-6" />
+            </svg>
+          </Button>
+
+          <Button
+            onClick={nextSlide}
+            variant="outline"
+            className="absolute right-3 sm:right-6 md:right-8 top-1/2 -translate-y-1/2 opacity-0 translate-x-5 transition-all duration-500 group-hover:opacity-100 group-hover:translate-x-0"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 20 20"
+              width="18"
+              height="18"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              className="text-muted"
+            >
+              <path d="M9 18l6-6-6-6" />
+            </svg>
+          </Button>
+          {/* Prev/Next Buttons */}
+          {/* <button
+            onClick={prevSlide}
+            className="absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 bg-white p-2 sm:p-3 rounded-full border border-color 
+                       flex md:opacity-0 md:-translate-x-5 md:transition-all md:duration-500 
+                       md:group-hover:opacity-100 md:group-hover:translate-x-0"
+          >
+            <ChevronLeft className="w-4 h-4 sm:w-5 sm:h-5 text-muted" />
+          </button>
+          <button
+            onClick={nextSlide}
+            className="absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 bg-white p-2 sm:p-3 rounded-full border border-color
+                       flex md:opacity-0 md:translate-x-5 md:transition-all md:duration-500 
+                       md:group-hover:opacity-100 md:group-hover:translate-x-0"
+          >
+            <ChevronRight className="w-4 h-4 sm:w-5 sm:h-5 text-muted" />
+          </button> */}
+        </div>
       </div>
-      </div>
-    </div>
     </section>
   );
 }

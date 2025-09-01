@@ -1,94 +1,141 @@
+"use client";
 import ProductCard from "@/components/product/ProductCard";
+import { newArrivalsProducts } from "@/constants";
+import { useState, useEffect } from "react";
+import { motion } from "framer-motion";
+import { Button } from "../ui/button";
 
 export default function NewArrivals() {
-  const products = [
-    {
-      name: "1. New and sale badge",
-      price: 110.0,
-      badges: ["SALE"] as const,
-     image: "/img/product-chair-01.jpg",
-      originalPrice: 130.0,
-      discount: 15,
-    },
-    {
-      name: "2. New badge product",
-      price: 80.0,
-      badges: ["NEW"] as const,
-     image: "/img/product-chair-02.jpg",
-    },
-    {
-      name: "3. Variable Product",
-      price: 50.0,
-     image: "/img/product-table-01.jpg",
-    },
-    {
-      name: "4. Grey armchair",
-      price: 19.0,
-      badges: ["NEW"] as const,
-     image: "/img/product-armchair-01.jpg",
-      discount: 15,
-    },
-    {
-      name: "5. Small wooden side table",
-      price: 55.0,
-     image: "/img/product-table-02.jpg",
-      badges: ["SALE"] as const,
-      discount: 25,
-    },
-    {
-      name: "6. Simple Product",
-      price: 70.0,
-     image: "/img/product-sofa-01.jpg",
-      badges: ["SALE"] as const,
-      discount: 20,
-    },
-    {
-      name: "7. Variable With Soldout",
-      price: 39.0,
+  const [index, setIndex] = useState(0);
+  const [visibleCols, setVisibleCols] = useState(5);
 
-      image: "/img/product_8_e0709cdb-4079-41b4-95a6-a88b8d8bb7b6_large.jpg",
-      badges: ["SALE"] as const,
-      discount: 30,
-    },
-    {
-      name: "8. Dark grey armchair",
-      price: 19.0,
-      badges: ["SOLD OUT"] as const,
-      image: "/img/product_9_15fa37fc-d449-4fde-8859-d70071312a98_large.jpg",
-    },
-    {
-      name: "9.Countdown Product",
-      price: 79.0,
-      image: "/img/product_10_77be83b0-5aee-469c-ab17-80e50106394b_large.jpg",
-    },
-  ];
+  const columns = Math.ceil(newArrivalsProducts.length / 2);
+
+  // Responsive visibleCols based on screen size
+  useEffect(() => {
+    const updateVisibleCols = () => {
+      if (window.innerWidth < 640) {
+        setVisibleCols(1); // Mobile
+      } else if (window.innerWidth < 1024) {
+        setVisibleCols(3); // Tablet
+      } else {
+        setVisibleCols(5); // Desktop
+      }
+    };
+
+    updateVisibleCols();
+    window.addEventListener("resize", updateVisibleCols);
+    return () => window.removeEventListener("resize", updateVisibleCols);
+  }, []);
+
+  const handleNext = () => {
+    if (index < columns - visibleCols) {
+      setIndex((prev) => prev + 1);
+    }
+  };
+
+  const handlePrev = () => {
+    if (index > 0) {
+      setIndex((prev) => prev - 1);
+    }
+  };
 
   return (
-    <section className="py-8 md:py-16 px-4 bg-white">
-      <div className="max-w-6xl mx-auto">
+    <section className="py-8  bg-white relative">
+      <div className="mx-auto xl:max-w-6xl lg:max-w-4xl md:max-w-2xl px-4 sm:px-6 lg:px-0">
+        {/* Header */}
         <div className="text-center mb-8 md:mb-12">
-          <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-2">
-            New <span className="italic font-semibold">Collections </span>Of
-            Arrivals
+          <h2 className="text-[28px] md:text-[32px] font-bold font-lato text-black mb-2">
+            New{" "}
+            <span className="italic font-light font-lato text-black">
+              Collections
+            </span>{" "}
+            Of Arrivals
           </h2>
-          <p className="text-[var(--text-muted)] text-base ">
+          <p className="text-muted font-rubik font-light text-sm md:text-base">
             Browse the collection of our new products. You will definitely find
             what you are looking for.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6">
-          {products.map((product, index) => (
-            <ProductCard
-              key={index}
-              name={product.name}
-              price={product.price}
-              badges={product.badges}
-              image={product.image}
-              originalPrice={product.originalPrice}
-              discount={product.discount}
-            />
-          ))}
+        {/* Products Slider */}
+        <div className="relative">
+          <div className="overflow-hidden">
+            <motion.div
+              className="flex"
+              animate={{ x: `-${index * (100 / visibleCols)}%` }}
+              transition={{ type: "spring", stiffness: 80, damping: 20 }}
+            >
+              {Array.from({ length: columns }).map((_, colIdx) => (
+                <div
+                  key={colIdx}
+                  className="grid grid-rows-2 min-w-[100%] sm:min-w-[33.33%] xl:min-w-[20%] lg:min-w-[25%] "
+                >
+                  {newArrivalsProducts
+                    .slice(colIdx * 2, colIdx * 2 + 2) // 2 per column
+                    .map((product, idx) => (
+                      <div key={idx} className="p-2">
+                        <ProductCard
+                          slug={product.slug}
+                          name={product.name}
+                          price={product.price}
+                          badges={product.badges}
+                          image={product.image}
+                          oldprice={product.oldprice}
+                          discount={product.discount}
+                        />
+                      </div>
+                    ))}
+                </div>
+              ))}
+            </motion.div>
+          </div>
+
+          {/* Prev Button */}
+          <Button
+            onClick={handlePrev}
+            disabled={index === 0}
+            variant="outline"
+            className="absolute -left-4 md:-left-8 top-1/2 -translate-y-1/2"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              width="20"
+              height="20"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              className="text-muted"
+            >
+              <path d="m15 18-6-6 6-6" />
+            </svg>
+          </Button>
+
+          {/* Next Button */}
+          <Button
+            onClick={handleNext}
+            disabled={index >= columns - visibleCols}
+            variant="outline"
+            className="absolute -right-4 md:-right-8 top-1/2 -translate-y-1/2"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              width="20"
+              height="20"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              className="text-muted"
+            >
+              <path d="M9 18l6-6-6-6" />
+            </svg>
+          </Button>
         </div>
       </div>
     </section>

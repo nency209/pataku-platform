@@ -1,186 +1,157 @@
 "use client";
-
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import Image from "next/image";
+import { useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
+import ServiceGuarantees from "@/components/sections/ServiceGuarantees";
+import { slides1 } from "@/constants/Hero";
+import { Button } from "../ui/button";
 import Link from "next/link";
-import { ChevronRight, Menu, ChevronDown } from "lucide-react";
-import { HeroProps, HeroContent } from "@/types";
-import { browseCategories } from "@/constants";
-import ServiceGuarantees from '@/components/sections/ServiceGuarantees'
-import { useEffect, useState, useRef } from "react";
-import AOS from "aos";
-import "aos/dist/aos.css";
-export default function Home2Hero({ content }: HeroProps = {}) {
-  const [isCategoriesOpen, setIsCategoriesOpen] = useState(false);
-  const [openSubmenu, setOpenSubmenu] = useState<string | null>(null);
-  const categoriesRef = useRef<HTMLDivElement>(null);
-  
-  const defaultContent: HeroContent = {
-    subtitle: "Beautiful and luxurious Decor at Affordable price",
-    title: "Slide",
-    title2: " CHAIR",
-    buttonText: "SHOP NOW",
-    buttonLink: "/products",
-    image: "/img/slider5.jpg",
+import BrowseCategories from "./BrowserCategories";
+
+export default function Home2Hero() {
+  const [index, setIndex] = useState(0);
+  const [lastAction, setLastAction] = useState<"next" | "prev" | null>(null);
+
+  const nextSlide = () => {
+    setIndex((prev) => (prev + 1) % slides1.length);
+    setLastAction("next");
   };
-  const heroContent = content || defaultContent;
 
-  useEffect(() => {
-    AOS.init({
-      duration: 800,
-      once: true,
-      anchorPlacement: "center-center",
-    });
-  }, []);
-
-  useEffect(() => {
-    function handleClickOutside(event: MouseEvent) {
-      if (categoriesRef.current && !categoriesRef.current.contains(event.target as Node)) {
-        setIsCategoriesOpen(false);
-        setOpenSubmenu(null);
-      }
-    }
-
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, []);
+  const prevSlide = () => {
+    setIndex((prev) => (prev - 1 + slides1.length) % slides1.length);
+    setLastAction("prev");
+  };
 
   return (
-    <section className="bg-surface py-4">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-16">
-        <div className="grid grid-cols-1 lg:grid-cols-4 border bg-white p-4 gap-2">
-          {/* Left Sidebar - Browse Categories */}
-          <div className="lg:col-span-1 relative" ref={categoriesRef}>
-            <div 
-              className="flex items-center justify-start gap-2 mb-4 cursor-pointer"
-              onClick={() => setIsCategoriesOpen(!isCategoriesOpen)}
-            >
-              <Menu className="w-5 h-5 text-gray-600" />
-              <h3 className="text-lg font-light text-gray-900">
-                BROWSE CATEGORIES
-              </h3>
-              <ChevronDown className={`w-4 h-4 text-gray-600 transition-transform ${isCategoriesOpen ? 'rotate-180' : ''}`} />
-            </div>
-            
-            {isCategoriesOpen && (
-              <nav className="absolute top-full left-0 w-64 bg-white border border-gray-200 rounded-lg shadow-lg z-50 max-h-96 overflow-y-auto">
-                {browseCategories.map((category) => (
-                  <div key={category.title} className="relative">
-                    <div
-                      className="flex items-center justify-between p-3 text-sm text-gray-700 hover:text-[var(--color-accent)] hover:bg-gray-50 cursor-pointer border-b border-gray-100"
-                      onClick={() => {
-                        if (category.hasSubmenu) {
-                          setOpenSubmenu(openSubmenu === category.title ? null : category.title);
-                        } else {
-                          // Navigate to the category page
-                          window.location.href = category.href;
-                        }
-                      }}
-                    >
-                      <span className="w-2 h-2 bg-gray-400 rounded-full mr-3"></span>
-                      <span className="flex-1">{category.title}</span>
-                      {category.hasSubmenu && (
-                        <ChevronRight className={`w-4 h-4 transition-transform ${openSubmenu === category.title ? 'rotate-90' : ''}`} />
-                      )}
-                    </div>
-                    
-                    {category.hasSubmenu && openSubmenu === category.title && (
-                      <div className="bg-gray-50 border-l-2 border-[var(--color-accent)]">
-                        {category.submenuItems?.map((subItem) => (
-                          <Link
-                            key={subItem.title}
-                            href={subItem.href}
-                            className="block px-6 py-2 text-sm text-gray-600 hover:text-[var(--color-accent)] hover:bg-gray-100 transition-colors"
-                          >
-                            {subItem.title}
-                          </Link>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-                ))}
-              </nav>
-            )}
+    <section className="bg-hero py-6">
+      <div className="mx-auto xl:max-w-6xl lg:max-w-4xl md:max-w-2xl px-4 sm:px-6 lg:px-0">
+        <div
+          className="
+            grid grid-cols-1
+            lg:grid-cols-[0.5fr_1.5fr_1fr]
+            xl:grid-cols-4
+            bg-white gap-4 p-4 
+          "
+        >
+          {/* 1️⃣ Left Sidebar - Categories */}
+          <div className="relative order-1">
+            <BrowseCategories />
           </div>
 
-          {/* Center - Hero Banner */}
-          <div className="lg:col-span-2 ">
-            <div className="relative  rounded-lg overflow-hidden ">
-              <div className="relative w-full  sm:h-[420px] ">
-                {/* Background Image */}
-                <Image
-                  src={heroContent.image}
-                  alt={heroContent.title}
-                  fill
-                  className="object-cover"
-                  priority
-                />
+          {/* 2️⃣ Center - Hero Banner */}
+          <div className="xl:col-span-2 relative col-span-1 group order-2">
+            <div className="relative w-full h-[250px] sm:h-[320px] md:h-[380px] lg:h-[420px]">
+              <Image
+                src={slides1[index].image}
+                alt={slides1[index].title}
+                fill
+                className="object-cover"
+                priority
+              />
 
-                {/* Text Overlay */}
-                <div
-                  className="absolute inset-0 py-8  lg:mr-48 mx-auto pl-12 items-center space-y-4"
-                  // data-aos="fade-right"
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={index}
+                  initial={{ opacity: 0, x: -50 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: 50 }}
+                  transition={{ duration: 0.6 }}
+                  className="absolute inset-0"
                 >
-                  <p className="text-hero-subtitle text-[22px] light font-[var(--font-family)] sm:text-lg">
-                    {heroContent.subtitle}
-                  </p>
-                  <h1 className="text-hero-title text-5xl sm:text-6xl lg:text-7xl font-[var(--font-family)] bold ">
-                    {heroContent.title}
-                  </h1>
-                  <h1 className="text-hero-title text-4xl sm:text-5xl font-[var(--font-family)] bold leading-tight ">
-                    {heroContent.title2}
-                  </h1>
+                  <div className="absolute inset-0 flex items-center">
+                    <div className="max-w-md xl:px-6 px-2">
+                      <p className="text-muted font-rubik font-light text-lg sm:text-xl md:text-2xl">
+                        {slides1[index].subtitle}
+                      </p>
+                      <p className="text-primary text-4xl sm:text-5xl md:text-6xl font-lato font-light leading-none">
+                        {slides1[index].title}
+                      </p>
+                      <p className="text-primary text-2xl sm:text-3xl md:text-4xl font-rubik font-light leading-none">
+                        {slides1[index].title2}
+                      </p>
 
-                  <a
-                    href={heroContent.buttonLink}
-                    // data-aos="zoom-in"
-                    className="btn-hero inline-block mt-6 w-full sm:w-auto p-2 text-sm  font-normal "
-                  >
-                    {heroContent.buttonText}
-                  </a>
-                </div>
+                      <Button
+                        asChild
+                        variant="black"
+                        size="lg"
+                        className="text-sm font-normal mt-2"
+                      >
+                        <Link href={slides1[index].buttonLink}>
+                          {slides1[index].buttonText}
+                        </Link>
+                      </Button>
+                    </div>
+                  </div>
+                </motion.div>
+              </AnimatePresence>
 
-                {/* Slider Dots */}
-                <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2">
-                  <div className="w-3 h-3 bg-[var(--color-accent)] rounded-full"></div>
-                  <div className="w-3 h-3 bg-white rounded-full"></div>
-                </div>
+              {/* Dots */}
+              <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex space-x-2">
+                <button
+                  onClick={prevSlide}
+                  className={`w-3 h-3 sm:w-4 sm:h-4 rounded-full bg-hero ${
+                    lastAction === "prev" || index === 0
+                      ? "border-2 primary-border"
+                      : "border-none"
+                  }`}
+                />
+                <button
+                  onClick={nextSlide}
+                  className={`w-3 h-3 sm:w-4 sm:h-4 rounded-full bg-hero ${
+                    lastAction === "next"
+                      ? "border-2 primary-border"
+                      : "border-none"
+                  }`}
+                />
               </div>
+
+              {/* Prev/Next Buttons */}
+              <button
+                onClick={prevSlide}
+                className="absolute left-2 top-1/2 -translate-y-1/2 bg-white p-2 border border-color
+                 opacity-0 -translate-x-5 transition-all duration-500 
+                 group-hover:opacity-100 group-hover:translate-x-0"
+              >
+                <ChevronLeft className="w-4 h-4 text-muted" />
+              </button>
+              <button
+                onClick={nextSlide}
+                className="absolute right-2 top-1/2 -translate-y-1/2 bg-white p-2 border border-color
+                 opacity-0 translate-x-5 transition-all duration-500
+                 group-hover:opacity-100 group-hover:translate-x-0"
+              >
+                <ChevronRight className="w-4 h-4 text-muted" />
+              </button>
             </div>
           </div>
 
-          {/* Right Side - Promotional Blocks */}
-          <div className="lg:col-span-1 space-y-4">
-            <div
-              className="rounded-lg overflow-hidden w-full h-[198px]"
-              data-aos="fade-up"
-              data-aos-delay="100"
-            >
+          {/* 3️⃣ Right Side - Promo Blocks (3 stacked) */}
+          <div className="xl:col-span-1 grid lg:grid-cols-1 md:grid-cols-2 gap-4 order-3">
+            <div className="relative overflow-hidden w-full h-[150px] sm:h-[180px] lg:h-[200px] xl:h-[200px]">
               <Image
                 src="/img/home2-banner1.jpg"
                 alt="Storage & Shelving"
                 fill
-                sizes="(max-width: 1024px) 100vw, 25vw"
                 className="object-cover"
               />
             </div>
-            <div
-              className="rounded-lg overflow-hidden w-full h-[198px]"
-              data-aos="fade-up"
-              data-aos-delay="200"
-            >
+
+            <div className="relative overflow-hidden w-full h-[150px] sm:h-[180px] lg:h-[200px] xl:h-[200px]">
               <Image
                 src="/img/home2-banner2.jpg"
-                alt="Storage & Shelving"
+                alt="Up to 25% Off"
                 fill
-                sizes="(max-width: 1024px) 100vw, 25vw"
                 className="object-cover"
               />
             </div>
+
+           
           </div>
         </div>
-          <ServiceGuarantees />
+
+        {/* Bottom Service Section */}
+        <ServiceGuarantees />
       </div>
     </section>
   );

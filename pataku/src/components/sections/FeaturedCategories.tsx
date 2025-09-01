@@ -1,52 +1,31 @@
 import Image from "next/image";
+import { HomefeaturedCategories } from "@/constants";
 
 export default function FeaturedCategories() {
-  const categories = [
-    {
-      name: "FURNITURE",
-      image: "/img/home1-banner1.jpg",
-      description: "Modern curved wooden lounge chair",
-    },
-    {
-      name: "ROOMS",
-      image: "/img/home1-banner2.jpg",
-      description: "Minimalist living room setup",
-    },
-    {
-      name: "LIGHTING",
-      image: "/img/home1-banner3.jpg",
-      description: "Collection of hanging pendant lights",
-    },
-    {
-      name: "DECOR",
-      image: "/img/home1-banner4.jpg",
-      description: "Teal-colored wall clock",
-    },
-  ];
-
+  
   return (
-    <section className="py-8 md:py-16 px-4 bg-white">
-      <div className="max-w-6xl mx-auto">
+    <section className="py-8 bg-white">
+      <div className="mx-auto xl:max-w-6xl lg:max-w-4xl md:max-w-2xl px-4 sm:px-6 lg:px-0">
         <div className="text-center mb-8 md:mb-12">
-          <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-2">
-            Featured <span className="italic font-semibold">Categories</span>
+          <h2 className="text-[32px] font-bold font-lato text-black mb-2">
+            Featured <span className="italic text-[32px] font-light font-lato text-black">Categories</span>
           </h2>
-          <p className="text-[var(--text-muted)] text-sm md:text-base">
+          <p className="text-muted font-rubik font-light text-base">
             Show all featured categories with products on home page.
           </p>
         </div>
       
       
       <div className=" grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6">
-        <div className="relative aspect-[4/3] lg:aspect-auto lg:h-full">
+        <div className="relative aspect-[4/3] lg:aspect-auto lg:h-full ">
           <Image
-            src={categories[0].image}
-            alt={categories[0].name}
+            src={HomefeaturedCategories [0].image}
+            alt={HomefeaturedCategories [0].name}
             fill
-            className="object-contain bg-white"
+            className="object-contain bg-white hover:cursor-pointer "
           />
-          <p className="absolute bottom-4 left-4 text-black font-medium text-lg">
-            {categories[0].name}
+          <p className="absolute bottom-4 xl:left-4 lg:left-6 md:left-24 left-16 text-black font-rubik font-light text-[22px] hover:cursor-pointer text-hover">
+            {HomefeaturedCategories [0].name}
           </p>
         </div>
 
@@ -55,19 +34,19 @@ export default function FeaturedCategories() {
           {/* Top image */}
           <div className="relative aspect-[4/2]">
             <Image
-              src={categories[1].image}
-              alt={categories[1].name}
+              src={HomefeaturedCategories [1].image}
+              alt={HomefeaturedCategories [1].name}
               fill
               className="object-contain bg-white"
             />
-            <p className="absolute bottom-4 left-4 text-black font-medium text-lg">
-              {categories[1].name}
+            <p className="absolute bottom-4 left-4 text-black  font-rubik font-light text-[22px] hover:cursor-pointer text-hover">
+              {HomefeaturedCategories [1].name}
             </p>
           </div>
 
           {/* Bottom two images */}
           <div className="grid grid-cols-2 gap-4 md:gap-6">
-            {categories.slice(2).map((category, idx) => (
+            {HomefeaturedCategories .slice(2).map((category, idx) => (
               <div key={idx} className="relative aspect-square">
                 <Image
                   src={category.image}
@@ -75,7 +54,7 @@ export default function FeaturedCategories() {
                   fill
                   className="object-contain bg-white"
                 />
-                <p className="absolute bottom-4 left-4 text-black font-medium text-lg">
+                <p className="absolute bottom-4 left-4 text-black font-rubik font-light text-[22px] hover:cursor-pointer text-hover">
                   {category.name}
                 </p>
               </div>

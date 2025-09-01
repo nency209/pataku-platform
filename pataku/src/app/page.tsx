@@ -1,16 +1,18 @@
 import { Metadata } from "next";
 import { homePageMetadata } from "@/lib/metadata";
-import Header from "@/app/layout/Header";
-import Hero from "@/components/sections/Hero";
-import FeaturedCategories from "@/components/sections/FeaturedCategories";
-
-import NewArrivals from "@/components/sections/NewArrivals";
-import PromotionalBanner from "@/components/sections/PromotionalBanner";
-import BottomSections from "@/components/sections/BottomSections";
-import LivingRoomBanner from "@/components/sections/LivingRoomBanner";
-import TopSellingProducts from "@/components/product/TopSellingProducts";
+import {
+  Hero,
+  FeaturedCategories,
+  NewArrivals,
+  PromotionalBanner,
+  BottomSections,
+  LivingRoomBanner,
+  TopSellingProducts,
+  BrowseCategories,
+  Navbar,
+} from "@/components/sections";
 import BlogPosts from "@/components/blog/BlogPosts";
-import Footer from "@/app/layout/Footer";
+import { Footer, Header } from "@/layout";
 
 export const metadata: Metadata = homePageMetadata;
 
@@ -18,15 +20,40 @@ export default function Home() {
   return (
     <main className="min-h-screen bg-white">
       <Header />
+      <div className="sticky top-0 z-50 bg-white border-t border-color">
+        <div
+          className="
+    grid 
+    grid-cols-1 
+    gap-8 
+    lg:gap-6
+    md:gap-0
+    sm:grid-cols-1 sm:items-center sm:justify-center
+    md:grid-cols-2 md:items-center md:justify-center 
+    lg:grid-cols-[0.5fr_1.1fr] lg:items-center lg:justify-start
+    xl:grid-cols-[1.2fr_2.3fr]
+  "
+        >
+          <BrowseCategories />
+
+          <Navbar />
+        </div>
+      </div>
+
       <Hero />
+
       <FeaturedCategories />
+
       <NewArrivals />
+
       <PromotionalBanner />
+
       <BottomSections />
+
       <LivingRoomBanner />
       <TopSellingProducts />
       <BlogPosts />
-      <Footer />
+      <Footer/>
     </main>
   );
 }

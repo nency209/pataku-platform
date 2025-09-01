@@ -1,10 +1,30 @@
-export { default as Hero } from './Hero'
-export { default as LivingRoomBanner } from './LivingRoomBanner'
-export { default as PromotionalBanner } from './PromotionalBanner'
-export { default as ServiceGuarantees } from './ServiceGuarantees'
-export { default as BottomSections } from './BottomSections'
-export { default as NewArrivals } from './NewArrivals'
-export { default as FeaturedCategories } from './FeaturedCategories'
+import { Import } from "lucide-react";
+import Home3NewArrival from "./Home3NewArrivals";
 
-
-
+export { default as Hero } from "./Hero";
+export { default as LivingRoomBanner } from "./LivingRoomBanner";
+export { default as PromotionalBanner } from "./PromotionalBanner";
+export { default as ServiceGuarantees } from "./ServiceGuarantees";
+export { default as BottomSections } from "./BottomSections";
+export { default as NewArrivals } from "./NewArrivals";
+export { default as FeaturedCategories } from "./FeaturedCategories";
+export { default as About } from "../pages/about";
+export { default as BrowseCategories } from "./BrowserCategories";
+export { default as Contact } from "./contact";
+export { default as Home2Banner } from "./Home2Banner";
+export { default as Home2Brand } from "./Home2Brand";
+export { default as Home2FeaturedCategories } from "./Home2FeaturesCategories";
+export { default as Home2Hero } from "./Home2Hero";
+export { default as Home2LivingRoomBanner } from "./Home2LivingRoomBanner";
+export { default as Home2NewArrivals } from "./Home2NewArrivals";
+export { default as Home3Hero } from "./Home3Hero";
+export { default as Home3NewArrival } from "./Home3NewArrivals";
+export { default as Home4Hero } from "./Home4Hero";
+export { default as Login } from "./Login";
+export { default as Navbar } from "./Navbar";
+export { default as Register } from "./Register";
+export { default as ShippingPolicy } from "../pages/shipping_policy";
+export { default as SizeChart } from "../pages/SizeChart";
+export { default as TopSellingProducts } from "./TopSellingProducts";
+export { default as DiningRoomProduct} from "./DiningRoomProduct";
+export { default as OutdoorFurnitureProduct } from "./OutdoorFurniture";

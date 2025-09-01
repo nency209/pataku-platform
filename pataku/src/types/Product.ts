@@ -1,21 +1,12 @@
 export interface Product {
-  id?: string;
+  slug: string;
   name: string;
   price: number;
-  originalPrice?: number;
+  oldprice?: number;
   image: string;
   category?: string;
-  badges?: readonly ("SALE" | "NEW" | "SOLD OUT")[];
+  badges?: ("SALE" | "NEW" | "SOLD OUT")[];
   description?: string;
-  inStock?: boolean;
-}
-
-export interface ProductCardProps {
-  name: string;
-  price: number;
-  originalPrice?: number;
-  badges?: readonly ("SALE" | "NEW" | "SOLD OUT")[];
-  countdown?: number[];
-  image: string;
+ countdown?: number[];
   discount?: number;
 }

@@ -1,14 +1,17 @@
 import { Metadata } from "next";
 import { homePageMetadata } from "@/lib/metadata";
-import Header from "@/app/layout/Header";
-import Home3Hero from "@/components/sections/Home3Hero";
+import {  Footer, Header } from "@/layout";
 
-import Footer from "@/app/layout/Footer";
-import Home2Banner from "@/components/sections/Home2Banner";
-import { BottomSections, LivingRoomBanner } from "@/components";
-import Home2Brand from "@/components/sections/Home2Brand";
-import Home2FeaturedCategories from "@/components/sections/Home2FeaturesCategories";
-import Home3NewArrivals from "@/components/sections/Home3NewArrivals";
+import {
+  Home3Hero,
+  Home2Banner,
+  Home2Brand,
+  Home2FeaturedCategories,
+  BottomSections,
+  LivingRoomBanner,
+  Navbar,
+  Home3NewArrival,
+} from "@/components/sections";
 
 export const metadata: Metadata = {
   ...homePageMetadata,
@@ -20,16 +23,20 @@ export const metadata: Metadata = {
 export default function Home3Page() {
   return (
     <main className="theme-home3 min-h-screen ">
-      <Header />
+       <Header />
+      <div className="sticky top-0 z-50 border border-color">
+        <div className="flex justify-center bg-navbar">
+          <Navbar />
+        </div>
+      </div>
       <Home3Hero />
-      <Home3NewArrivals />
+      <Home3NewArrival />
       <Home2Banner />
-
       <BottomSections />
       <LivingRoomBanner />
       <Home2FeaturedCategories />
       <Home2Brand />
-      <Footer />
+      <Footer/>
     </main>
   );
 }

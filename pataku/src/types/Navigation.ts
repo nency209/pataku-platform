@@ -1,3 +1,15 @@
+export interface AccountOption
+ {
+  label: string;
+  href: string;
+};
+
+export interface CurrencyOption {
+  name: string;
+  
+};
+
+
 export interface NavigationItem {
   title: string;
   href: string;

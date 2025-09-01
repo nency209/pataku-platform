@@ -1,18 +1,20 @@
 import { Metadata } from "next";
 import { homePageMetadata } from "@/lib/metadata";
-import Header from "@/app/layout/Header";
-import Home2Hero from "@/components/sections/Home2Hero";
+import {
+  Home2Hero,
+  Home2LivingRoomBanner,
+  Home2NewArrivals,
+  LivingRoomBanner,
+  Home2Banner,
+  Home2FeaturedCategories,
+  Home2Brand,
+  Navbar,
+  OutdoorFurnitureProduct,
+  DiningRoomProduct,
+} from "@/components/sections";
 
-import Footer from "@/app/layout/Footer";
 import BlogPosts from "@/components/blog/BlogPosts";
-import LivingRoomBanner from "@/components/sections/LivingRoomBanner";
-import Home2LivingRoomBanner from "@/components/sections/Home2LivingRoomBanner";
-import Home2NewArrivals from "@/components/sections/Home2NewArrivals";
-import { DiningRoomProduct } from "@/components";
-import OutdoorFurniture from "@/components/product/OutdoorFurniture";
-import Home2Banner from "@/components/sections/Home2Banner";
-import Home2FeaturedCategories from "@/components/sections/Home2FeaturesCategories";
-import Home2Brand from "@/components/sections/Home2Brand";
+import { Footer, Header } from "@/layout";
 
 export const metadata: Metadata = {
   ...homePageMetadata,
@@ -23,19 +25,25 @@ export const metadata: Metadata = {
 
 export default function Home2Page() {
   return (
-    <main className="theme-home2 min-h-screen bg-white">
+    <div className="theme-home2">
       <Header />
+      <div className="bg-navbar sticky top-0 z-50">
+        <div className="max-w-6xl mx-auto border-color flex justify-center xl:justify-start">
+          <Navbar />
+        </div>
+      </div>
+
       <Home2Hero />
       <Home2NewArrivals />
       <Home2LivingRoomBanner />
       <DiningRoomProduct />
       <LivingRoomBanner />
-      <OutdoorFurniture />
+      <OutdoorFurnitureProduct />
       <Home2Banner />
       <Home2FeaturedCategories />
       <Home2Brand />
       <BlogPosts />
-      <Footer />
-    </main>
+      <Footer/>
+    </div>
   );
 }

@@ -9,7 +9,3 @@ export * from './product'
 
 // Blog components
 export * from './blog'
-
-// Theme components
-// export { default as ThemeProvider } from './ThemeProvider'
-// export { default as ThemeSwitcher } from './ThemeSwitcher'

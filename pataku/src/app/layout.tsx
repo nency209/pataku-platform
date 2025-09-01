@@ -1,9 +1,11 @@
+// src/app/layout.tsx
 import type { Metadata } from "next";
-
 import "./globals.css";
+import ClientTransition from "@/components/sections/ClientLayout";
+import ReduxProvider from "@/providers/ReduxProvider";
 
 export const metadata: Metadata = {
-  title: "pataku clone",
+  title: "Pataku Clone",
   description: "Shopify-like E-commerce Clone",
 };
 
@@ -14,8 +16,10 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body>
-        <div id="app">{children}</div>
+      <body suppressHydrationWarning={true}>
+        <ClientTransition>
+          <ReduxProvider>{children}</ReduxProvider>
+        </ClientTransition>
       </body>
     </html>
   );
