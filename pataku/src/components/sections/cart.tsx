@@ -145,7 +145,7 @@ export default function CartPage() {
             </tbody>
           </table>
           <Button variant="black" size="lg"
-            onClick={() => router.push("/Checkout")}
+            onClick={() => router.push("/checkout")}
             className="mt-4"
           >
             Proceed to Checkout

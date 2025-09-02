@@ -127,13 +127,13 @@ export const navigationItems: NavigationItem[] = [
     href: "/pages",
     hasDropdown: true,
     dropdownItems: [
-      { title: "Size Chart", href: "/pages/Size-Chart" },
+      { title: "Size Chart", href: "/pages/size-Chart" },
       { title: "Shipping Policy", href: "/pages/shipping-policy" },
       { title: "Wishlist", href: "/pages/wishlist" },
-      { title: "About", href: "/pages/About" },
+      { title: "About", href: "/pages/about" },
     ],
   },
-  { title: "BLOG", href: "/Blog" },
-  { title: "CONTACT", href: "/Contact" },
+  { title: "BLOG", href: "/blog" },
+  { title: "CONTACT", href: "/contact" },
 ];
 

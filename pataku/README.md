@@ -1,104 +1,101 @@
-# Responsive E-commerce Furniture Website
+🛍️ Pataku — Next.js E-commerce Frontend
 
-A modern, fully responsive e-commerce website built with Next.js, TypeScript, and Tailwind CSS. Features a clean design with proper UI components and mobile-first approach.
+Pataku — A clean, minimal, and modern e-commerce frontend built with:
 
-## Features
+Next.js + TypeScript
 
-- **Fully Responsive Design**: Works perfectly on mobile, tablet, and desktop
-- **Modern UI Components**: Built with reusable button, Card, and Badge components
-- **Interactive Elements**: Hover effects, mobile menu, and smooth transitions
-- **Product Showcase**: Featured categories, new arrivals, deals, and popular products
-- **Blog Section**: Blog post previews with cards
-- **Comprehensive Footer**: Contact information, social links, and newsletter signup
+Tailwind CSS
 
-## Sections Included
+Redux Toolkit
 
-1. **Header**: Responsive navigation with mobile menu
-2. **Hero Section**: Main banner with call-to-action
-3. **Featured Categories**: Four main product categories
-4. **New Arrivals**: Grid of new products with badges
-5. **Promotional Banner**: Melbourne furniture maker message
-6. **Deals & Popular Products**: Two-column layout with countdown timers
-7. **Living Room Banner**: Promotional section with discount
-8. **Top Selling Products**: Three featured products
-9. **Blog Posts**: Three blog post previews
-10. **Footer**: Complete footer with multiple sections
+Formik + Yup
 
-## UI Components
+Framer Motion
 
-- **button**: Multiple variants (default, black, white, ghost, link)
-- **Card**: For structured content display
-- **Badge**: For product status indicators (SALE, NEW, SOLD OUT)
+shadcn ui
 
-## Technologies Used
+Includes Cart, Wishlist, and Razorpay Payment Integration.
 
-- **Next.js 15**: React framework
-- **TypeScript**: Type safety
-- **Tailwind CSS**: Utility-first CSS framework
-- **Class Variance Authority**: For component variants
-- **Radix UI**: Accessible UI primitives
+🚀 Project Overview
 
-## Getting Started
+Pataku is a frontend-only e-commerce demo app focused on:
 
-1. **Install dependencies**:
-   ```bash
-   npm install
-   ```
+✅ Fast UI rendering with Next.js
+✅ Predictable state via Redux Toolkit
+✅ Smooth forms with Formik + Yup
+✅ Micro-interactions using Framer Motion
+✅ Utility-first styling with Tailwind CSS
+✅ Full TypeScript support
+✅ Integrated Cart, Wishlist, Razorpay Checkout
 
-2. **Run the development server**:
-   ```bash
-   npm run dev
-   ```
+The project includes:
 
-3. **Open your browser** and navigate to `http://localhost:3000`
+Navigation bar with dropdowns
 
-## Project Structure
+Product listing & product detail pages
 
-```
-src/
-├── app/
-│   ├── components/
-│   │   ├── Header.tsx          # Responsive navigation
-│   │   ├── Hero.tsx            # Main banner
-│   │   ├── FeaturedCategories.tsx
-│   │   ├── NewArrivals.tsx
-│   │   ├── PromotionalBanner.tsx
-│   │   ├── BottomSections.tsx
-│   │   ├── LivingRoomBanner.tsx
-│   │   ├── TopSellingProducts.tsx
-│   │   ├── BlogPosts.tsx
-│   │   ├── Footer.tsx
-│   │   └── ProductCard.tsx     # Reusable product component
-│   ├── layout.tsx
-│   └── page.tsx                # Main page
-├── components/
-│   └── ui/                     # Reusable UI components
-│       ├── button.tsx
-│       ├── card.tsx
-│       └── badge.tsx
-└── lib/
-    └── utils.ts                # Utility functions
-```
+Mini-cart & wishlist system
 
-## Responsive Breakpoints
+Razorpay integration for payments
 
-- **Mobile**: < 640px
-- **Tablet**: 640px - 1024px
-- **Desktop**: > 1024px
+Header search with live suggestions
 
-## Customization
+🛠️ Tech Stack
 
-The website is built with a modular component structure, making it easy to:
-- Add new sections
-- Modify existing components
-- Change colors and styling
-- Add new product data
-- Integrate with a backend API
+⚡ Next.js (13+ — App Router / Pages Router)
 
-## Browser Support
+🔷 TypeScript
 
-- Chrome (latest)
-- Firefox (latest)
-- Safari (latest)
-- Edge (latest)
-- Mobile browsers (iOS Safari, Chrome Mobile)
+🎨 Tailwind CSS
+
+🗂️ Redux Toolkit (with optional RTK Query)
+
+📝 Formik + Yup (forms & validation)
+
+🎞️ Framer Motion (animations)
+
+🧹 ESLint + Prettier
+
+⚡ Quick Start
+# 1️⃣ Clone the repository
+git clone 
+cd pataku
+
+# 2️⃣ Install dependencies
+npm install
+# or
+yarn
+
+# 3️⃣ Run development server
+npm run dev
+# or
+yarn dev
+
+# 4️⃣ Open the app
+http://localhost:3000
+
+🔑 Environment Variables
+
+Create a .env.local file in the project root .
+
+# Razorpay
+RAZORPAY_KEY_ID=""
+RAZORPAY_KEY_SECRET=""
+NEXT_PUBLIC_RAZORPAY_KEY_ID=""
+
+# Google Maps (if needed)
+NEXT_PUBLIC_GOOGLE_MAPS_API_KEY=""
+
+📦 Features
+
+🛒 Cart Management (Add, remove, update items)
+
+❤️ Wishlist (Save favorite products)
+
+💳 Razorpay Integration (Checkout & payment flow)
+
+🔍 Header Search with Suggestions
+
+🎨 Responsive UI with Tailwind CSS
+
+⚡ Framer Motion Animations

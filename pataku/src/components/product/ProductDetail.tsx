@@ -384,7 +384,7 @@ export default function ProductPage({ slug }: { slug: string }) {
                     View Cart
                   </button>
                   <button
-                    onClick={() => router.push("/Checkout")}
+                    onClick={() => router.push("/checkout")}
                     className="px-4 py-2 bg-black text-white"
                   >
                     Checkout
