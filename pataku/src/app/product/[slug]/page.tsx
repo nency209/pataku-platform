@@ -1,5 +1,5 @@
 import { Metadata } from "next";
-import { homePageMetadata } from "@/lib/metadata";
+import { homePageMetadata } from "@/constants/metadata";
 import { BrowseCategories, Navbar } from "@/components";
 import ProductDetail from "@/components/product/ProductDetail";
 import CustomeCollection from "@/components/shop/Customecollection";
@@ -33,12 +33,12 @@ export default function NewSaleProductPage() {
           <Navbar />
         </div>
       </div>
-      <NavigationIndex/>
+      <NavigationIndex />
       <ProductDetail />
       <ProductTabs />
       <RelatedProduct />
       <CustomeCollection />
-      <Footer/>
+      <Footer />
     </main>
   );
 }

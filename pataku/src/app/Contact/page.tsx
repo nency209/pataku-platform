@@ -1,6 +1,9 @@
 import { Navbar, Contact, BrowseCategories } from "@/components";
 import MapComponent from "@/components/sections/map";
 import { Footer, Header, NavigationIndex } from "@/layout";
+import { contactPageMetadata } from "@/constants/metadata";
+
+export const metadata = contactPageMetadata;
 
 export default function RegisterHome() {
   return (

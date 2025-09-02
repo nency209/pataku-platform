@@ -1,5 +1,5 @@
 import { Metadata } from "next";
-import { homePageMetadata } from "@/lib/metadata";
+import { productsdetail } from "@/constants/Productdetails";
 import { BrowseCategories, Navbar } from "@/components";
 import ProductDetail from "@/components/product/ProductDetail";
 import CustomeCollection from "@/components/shop/Customecollection";
@@ -7,14 +7,48 @@ import RelatedProduct from "@/components/shop/RelatedProduct";
 import ProductTabs from "@/components/shop/ProductTabs";
 import { Footer, Header, NavigationIndex } from "@/layout";
 
-export const metadata: Metadata = {
-  ...homePageMetadata,
-  title: "New and Sale Badge Product | Pataku",
-  description:
-    "Discover our featured product with new and sale badges. Limited stock available.",
+
+type Props = {
+  params: { slug: string };
 };
 
-export default function NewSaleProductPage() {
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const product = productsdetail.find((p) => p.slug === params.slug);
+
+  if (!product) {
+    return {
+      title: "Product Not Found",
+      description: "The product you are looking for does not exist.",
+    };
+  }
+
+  return {
+    title: product.name, 
+    description: product.description || `Buy ${product.name} at best price.`,
+    keywords: [product.name,  "pataku", "shopping"],
+    openGraph: {
+      title: product.name,
+      description: product.description,
+      images: [
+        {
+          url: product.image,
+          width: 600,
+          height: 600,
+          alt: product.name,
+        },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: product.name,
+      description: product.description,
+      images: [product.image],
+    },
+  };
+}
+
+
+export default function NewSaleProductPage({ params }: Props) {
   return (
     <main className="min-h-screen bg-white">
       <Header />
@@ -33,12 +67,12 @@ export default function NewSaleProductPage() {
           <Navbar />
         </div>
       </div>
-      <NavigationIndex/>
-      <ProductDetail />
+      <NavigationIndex />
+      <ProductDetail slug={params.slug}/>
       <ProductTabs />
       <RelatedProduct />
       <CustomeCollection />
-      <Footer/>
+      <Footer />
     </main>
   );
 }

@@ -71,7 +71,7 @@ export default function Home3Hero() {
 <div className="absolute xl:bottom-8  lg:bottom-16 md:bottom-14 bottom-1 left-1/2 -translate-x-1/2 flex space-x-2">
             <button
               onClick={prevSlide}
-              className={`w-3 h-3 sm:w-4 sm:h-4 rounded-full bg-hero ${
+              className={`w-3 h-3 sm:w-4 sm:h-4 rounded-full bg-white ${
                 lastAction === "prev" || index === 0
                   ? "border-2 primary-border"
                   : "border-none"
@@ -79,7 +79,7 @@ export default function Home3Hero() {
             />
             <button
               onClick={nextSlide}
-              className={`w-3 h-3 sm:w-4 sm:h-4 rounded-full bg-hero ${
+              className={`w-3 h-3 sm:w-4 sm:h-4 rounded-full bg-white ${
                 lastAction === "next"
                   ? "border-2 primary-border"
                   : "border-none"

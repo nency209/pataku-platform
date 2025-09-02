@@ -7,7 +7,9 @@ import loadScript from "@/utils/loadscript";
 import Link from "next/link";
 import { useState } from "react";
 import Image from "next/image";
+import { checkoutPageMetadata } from "@/constants/metadata";
 
+export const metadata=checkoutPageMetadata
 const Schema = Yup.object({
   email: Yup.string().email("Invalid").required("Required"),
   firstName: Yup.string().required("Required"),

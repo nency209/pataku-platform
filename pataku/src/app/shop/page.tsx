@@ -1,10 +1,6 @@
 import { Metadata } from "next";
-import { homePageMetadata } from "@/lib/metadata";
-import {
-  
-  BrowseCategories,
-  Navbar,
-} from "@/components/sections";
+import { homePageMetadata } from "@/constants/metadata";
+import { BrowseCategories, Navbar } from "@/components/sections";
 
 import { Footer, Header, NavigationIndex } from "@/layout";
 import ShopPage from "@/components/shop/Shoppage";
@@ -32,8 +28,8 @@ export default function Home() {
       </div>
 
       <NavigationIndex />
-      <ShopPage/>
-      <Footer/>
+      <ShopPage />
+      <Footer />
     </main>
   );
 }

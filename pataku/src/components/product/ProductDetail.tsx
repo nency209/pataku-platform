@@ -12,8 +12,8 @@ import { useAppDispatch } from "@/redux/hook";
 import { addToCart } from "@/redux/cartslice";
 import { addToWishlist } from "@/redux/wishlistslice";
 
-export default function ProductPage() {
-  const { slug } = useParams();
+export default function ProductPage({ slug }: { slug: string }) {
+  
   const router = useRouter();
   const products = productsdetail;
 
@@ -118,7 +118,7 @@ export default function ProductPage() {
             </div>
 
             <button
-              className="hidden sm:block mt-2 px-4 py-1 bg-white text-muted border border-color left-8  rounded absolute bottom-72 z-10"
+              className="hidden sm:block mt-2 px-4 py-1 bg-white text-muted border border-color left-8  rounded absolute bottom-60 z-10"
               onClick={() =>
                 setThumbIndex((prev) =>
                   Math.min(product.categories.length - 3, prev + 1)

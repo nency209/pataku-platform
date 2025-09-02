@@ -1,5 +1,5 @@
 import { Metadata } from "next";
-import { homePageMetadata } from "@/lib/metadata";
+import { homePageMetadata } from "@/constants/metadata";
 import {
   Hero,
   FeaturedCategories,
@@ -53,7 +53,7 @@ export default function Home() {
       <LivingRoomBanner />
       <TopSellingProducts />
       <BlogPosts />
-      <Footer/>
+      <Footer />
     </main>
   );
 }

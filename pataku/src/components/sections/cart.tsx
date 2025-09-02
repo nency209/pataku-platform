@@ -5,6 +5,7 @@ import { removeFromCart, updateQuantity, clearCart } from "@/redux/cartslice";
 import Link from "next/link";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { Button } from "../ui/button";
 
 export default function CartPage() {
   const cart = useSelector((state: RootState) => state.cart.items);
@@ -83,7 +84,7 @@ export default function CartPage() {
                 ${(item.price * (localQuantities[item.slug] || item.quantity)).toFixed(2)}
               </td>
               <td className="p-2 border">
-                <button
+                <Button variant="black" size="lg"
                   onClick={() =>
                     dispatch(
                       removeFromCart({
@@ -96,7 +97,7 @@ export default function CartPage() {
                   className="text-red-500"
                 >
                   ❌
-                </button>
+               </Button>
               </td>
             </tr>
           ))}
@@ -105,29 +106,29 @@ export default function CartPage() {
 
       {/* Actions */}
       <div className="flex gap-4 mt-4">
-        <button onClick={handleUpdateCart} className="bg-black text-white px-4 py-2 rounded">
+        <Button variant="black" size="lg" onClick={handleUpdateCart} >
           Update Cart
-        </button>
-        <Link href="/" className="bg-black text-white px-4 py-2 rounded">
+       </Button>
+        <Link href="/" className="bg-black text-white px-4 py-2">
           Continue Shopping
         </Link>
-        <button onClick={() => dispatch(clearCart())} className="bg-black text-white px-4 py-2 rounded">
+        <Button variant="black" size="lg" onClick={() => dispatch(clearCart())} >
           Clear Cart
-        </button>
+       </Button>
       </div>
 
       {/* Totals */}
-      <div className="grid md:grid-cols-2 gap-6 mt-10">
-        <div>
+      <div className="grid md:grid-cols-2 grid-cols-1 gap-6  mt-10 ">
+        <div >
           <h2 className="text-lg font-semibold mb-2">Get shipping estimates</h2>
-          <select className="w-64 border px-2 py-1 mb-2">
+          <select className="w-56 border px-2 py-1 mb-2 mx-2">
             <option>---</option>
             <option>USA</option>
             <option>India</option>
             <option>UK</option>
           </select>
           <input type="text" placeholder="Zip/Postal Code" className="w-52 border px-2 py-1 mb-2" />
-          <button className="bg-black text-white px-4 py-2 rounded">Calculate shipping</button>
+          <Button variant="black" size="lg" >Calculate shipping</Button >
         </div>
         <div>
           <h2 className="text-lg font-semibold mb-2">Cart Totals</h2>
@@ -143,12 +144,12 @@ export default function CartPage() {
               </tr>
             </tbody>
           </table>
-          <button
+          <Button variant="black" size="lg"
             onClick={() => router.push("/Checkout")}
-            className="mt-4 bg-black text-white px-4 py-2 rounded w-full"
+            className="mt-4"
           >
             Proceed to Checkout
-          </button>
+         </Button>
         </div>
       </div>
     </div>

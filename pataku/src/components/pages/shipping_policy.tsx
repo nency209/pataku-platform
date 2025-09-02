@@ -7,7 +7,7 @@ export default function ShippingPolicy() {
       </h2>
       {shippingPolicy.map((section, index) => {
         if (section.type === "paragraph") {
-          return <p className="text-sm  font-lato light">{section.content}</p>;
+          return <p key={index} className="text-sm  font-lato light">{section.content}</p>;
         }
 
         if (section.type === "list") {

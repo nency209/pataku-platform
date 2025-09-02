@@ -88,7 +88,7 @@ export const navigationItems: NavigationItem[] = [
             href: "/shop/Countdown-Product",
             badge: "Countdown",
           },
-          { title: "Demo product title", href: "/shop/Demoproducttitle" },
+          { title: "Demo product title", href: "/shop//Demo-product-title" },
           { title: "Product with video", href: "/shop/video", badge: "Video" },
         ],
       },

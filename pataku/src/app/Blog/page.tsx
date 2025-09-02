@@ -1,7 +1,10 @@
 import Blog from "@/components/blog/Blog";
 import { Footer, Header, NavigationIndex } from "@/layout";
 import { BrowseCategories, Navbar } from "@/components";
+import { blogPageMetadata } from "@/constants/metadata";
 
+
+export const metadata=blogPageMetadata
 export default function RegisterHome() {
   return (
     <main className="min-h-screen">

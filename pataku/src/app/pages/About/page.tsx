@@ -1,6 +1,7 @@
 import About from "@/components/pages/about";
+import { aboutPageMetadata } from "@/constants/metadata";
 
-import { NavigationIndex } from "@/layout";
+export const metadata=aboutPageMetadata
 
 export default function LoginHome() {
   return (

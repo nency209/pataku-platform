@@ -115,3 +115,60 @@ export const blogPageMetadata: Metadata = generateMetadata(
     'Read our latest articles on home decor, furniture trends, and interior design tips.',
     ['blog', 'home decor tips', 'furniture trends', 'interior design', 'articles']
 )
+
+// Wishlist Page Metadata
+export const wishlistPageMetadata: Metadata = generateMetadata(
+  "Wishlist",
+  "View and manage your saved favorite products on Pataku.",
+  ["wishlist", "favorites", "saved products", "furniture wishlist"]
+)
+
+// Cart Page Metadata
+export const cartPageMetadata: Metadata = generateMetadata(
+  "Cart",
+  "Review the items in your shopping cart and proceed to checkout.",
+  ["cart", "shopping cart", "checkout", "furniture cart"]
+)
+
+// About Page Metadata
+export const aboutPageMetadata: Metadata = generateMetadata(
+  "About Us",
+  "Learn more about Pataku, our mission, and our commitment to providing luxury and affordable furniture.",
+  ["about", "about pataku", "company info", "furniture brand"]
+)
+
+// Shipping Policy Metadata
+export const shippingPolicyMetadata: Metadata = generateMetadata(
+  "Shipping Policy",
+  "Read Pataku's shipping policy including delivery timelines, charges, and more.",
+  ["shipping", "shipping policy", "delivery", "furniture shipping"]
+)
+
+// Size Guide Metadata
+export const sizeGuideMetadata: Metadata = generateMetadata(
+  "Size Guide",
+  "Check our detailed size guide to find the perfect fit for your furniture and home decor.",
+  ["size guide", "dimensions", "furniture size", "measurements"]
+)
+
+
+// Login Page Metadata
+export const loginPageMetadata: Metadata = generateMetadata(
+  "Login",
+  "Access your Pataku account to view orders, manage wishlist, and shop seamlessly.",
+
+)
+
+// Register Page Metadata
+export const registerPageMetadata: Metadata = generateMetadata(
+  "Register",
+  "Create a new Pataku account to enjoy exclusive offers, manage your orders, and save favorite products.",
+  
+)
+
+// Checkout Page Metadata
+export const checkoutPageMetadata: Metadata = generateMetadata(
+  "Checkout",
+  "Complete your purchase securely with Pataku’s easy checkout process.",
+
+)

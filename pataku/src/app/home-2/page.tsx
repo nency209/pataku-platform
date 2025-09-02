@@ -1,5 +1,5 @@
 import { Metadata } from "next";
-import { homePageMetadata } from "@/lib/metadata";
+import { homePageMetadata } from "@/constants/metadata";
 import {
   Home2Hero,
   Home2LivingRoomBanner,
@@ -17,7 +17,7 @@ import BlogPosts from "@/components/blog/BlogPosts";
 import { Footer, Header } from "@/layout";
 
 export const metadata: Metadata = {
-  ...homePageMetadata,
+ 
   title: "Home Shop 2 | Pataku",
   description:
     "Explore our second home shop variant featuring modern furniture and home decor. Discover unique pieces for your living space.",
@@ -43,7 +43,7 @@ export default function Home2Page() {
       <Home2FeaturedCategories />
       <Home2Brand />
       <BlogPosts />
-      <Footer/>
+      <Footer />
     </div>
   );
 }

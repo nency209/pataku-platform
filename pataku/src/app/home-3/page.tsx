@@ -1,6 +1,6 @@
 import { Metadata } from "next";
-import { homePageMetadata } from "@/lib/metadata";
-import {  Footer, Header } from "@/layout";
+import { homePageMetadata } from "@/constants/metadata";
+import { Footer, Header } from "@/layout";
 
 import {
   Home3Hero,
@@ -23,7 +23,7 @@ export const metadata: Metadata = {
 export default function Home3Page() {
   return (
     <main className="theme-home3 min-h-screen ">
-       <Header />
+      <Header />
       <div className="sticky top-0 z-50 border border-color">
         <div className="flex justify-center bg-navbar">
           <Navbar />
@@ -36,7 +36,7 @@ export default function Home3Page() {
       <LivingRoomBanner />
       <Home2FeaturedCategories />
       <Home2Brand />
-      <Footer/>
+      <Footer />
     </main>
   );
 }

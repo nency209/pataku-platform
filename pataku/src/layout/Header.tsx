@@ -1,7 +1,6 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
-import { useState } from "react";
-import { accountOptions, currencyOptions } from "@/constants";
+import { useState, useMemo } from "react";
+import { accountOptions, currencyOptions, navigationItems } from "@/constants";
 import Link from "next/link";
 import Image from "next/image";
 import {
@@ -14,7 +13,7 @@ import { Button } from "@/components/ui/button";
 import { AnimatePresence, motion } from "framer-motion";
 import MiniCart from "@/components/sections/minicart";
 import { useSelector } from "react-redux";
-import { RootState } from "@/redux/store"; 
+import { RootState } from "@/redux/store";
 
 
 export default function Header() {
@@ -22,10 +21,31 @@ export default function Header() {
   const [open, setopen] = useState(false);
   const [opencurrency, setopencurrency] = useState(false);
   const [isCartOpen, setIsCartOpen] = useState(false);
+    const [searchQuery, setSearchQuery] = useState("");
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
   const cartItems = useSelector((state: RootState) => state.cart.items);
 
 // calculate total quantity
 const cartCount = cartItems.reduce((acc, item) => acc + item.quantity, 0);
+
+const productLinks = useMemo(() => {
+  const productNav = navigationItems.find((nav) => nav.title === "PRODUCT");
+
+  if (!productNav || !productNav.dropdownItems) return [];
+
+  return productNav.dropdownItems.map((item: any) => ({
+    title: item.title,
+    href: item.href,
+  }));
+}, []);
+
+const filteredResults = useMemo(() => {
+  if (!searchQuery) return [];
+  return productLinks.filter((item) =>
+    item.title.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+}, [searchQuery, productLinks]);
+
 
 
   return (
@@ -180,11 +200,18 @@ const cartCount = cartItems.reduce((acc, item) => acc + item.quantity, 0);
 
         <div className="mx-8 flex justify-center  ">
           <div className="relative w-full px-10 md:px-4 xl:px-24 ">
-            <input
-              type="text"
-              placeholder="Search our store"
-              className="w-full  py-4 border-b border-color outline-none px-2 placeholder:font-rubik placeholder:font-normal placeholder:text-[13px] placeholder:text-[#91959B]"
-            />
+           
+             <input
+            type="text"
+            placeholder="Search our store"
+            className="w-full  py-4 border-b border-color outline-none px-2 placeholder:font-rubik placeholder:font-normal placeholder:text-[13px] placeholder:text-[#91959B]"
+            value={searchQuery}
+            onChange={(e) => {
+              setSearchQuery(e.target.value);
+              setIsSearchOpen(true);
+            }}
+            onBlur={() => setTimeout(() => setIsSearchOpen(false), 200)} // small delay so user can click link
+          />
             <button className="absolute xl:right-24 right-10 md:right-2 top-1/2 transform -translate-y-1/2 ">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -202,6 +229,27 @@ const cartCount = cartItems.reduce((acc, item) => acc + item.quantity, 0);
                 <circle cx="11" cy="11" r="8" />
               </svg>
             </button>
+            <AnimatePresence>
+            {isSearchOpen && filteredResults.length > 0 && (
+              <motion.div
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                transition={{ duration: 0.3 }}
+                className="absolute top-full left-0 right-0 bg-white shadow-md border mt-2 max-h-60 overflow-y-auto z-80"
+              >
+                {filteredResults.map((item) => (
+                  <Link
+                    key={item.href}
+                    href={item.href}
+                    className="block px-4 py-2 text-sm hover:bg-gray-100"
+                  >
+                    {item.title}
+                  </Link>
+                ))}
+              </motion.div>
+            )}
+          </AnimatePresence>
           </div>
         </div>
 

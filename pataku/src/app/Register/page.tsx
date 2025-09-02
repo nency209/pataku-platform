@@ -1,6 +1,8 @@
 import { Footer, Header, NavigationIndex } from "@/layout";
 import { BrowseCategories, Navbar, Register } from "@/components";
+import { registerPageMetadata } from "@/constants/metadata";
 
+export const metadata=registerPageMetadata
 export default function RegisterHome() {
   return (
     <main className="min-h-screen">

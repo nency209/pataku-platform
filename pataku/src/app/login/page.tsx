@@ -1,6 +1,8 @@
 import { Footer, Header, NavigationIndex } from "@/layout";
 import { Navbar, Login, BrowseCategories } from "@/components";
+import { loginPageMetadata } from "@/constants/metadata";
 
+export const metadata=loginPageMetadata
 export default function LoginHome() {
   return (
     <main className="min-h-screen">

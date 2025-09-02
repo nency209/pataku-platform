@@ -1,6 +1,6 @@
 import ShippingPolicy from "@/components/pages/shipping_policy";
-import SizeChart from "@/components/pages/SizeChart";
-import { NavigationIndex } from "@/layout";
+import { shippingPolicyMetadata } from "@/constants/metadata";
+export const metadata=shippingPolicyMetadata
 
 export default function LoginHome() {
   return (

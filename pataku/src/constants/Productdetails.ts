@@ -172,7 +172,7 @@ export const productsdetail: Products[] = [
     sizes: ["m", "l"],
      category: ['Chair', 'Deals Product', 'Featured Product'],
     colors: ["black", "gray"],
-    categories: ["/img/product-video.jpg"],
+    categories: ["/img/product3.jpg"],
     image: "/img/product12.jpg",
   },
 ];

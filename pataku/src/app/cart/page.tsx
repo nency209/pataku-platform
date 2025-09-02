@@ -1,20 +1,14 @@
-import { Metadata } from "next";
-import { homePageMetadata } from "@/lib/metadata";
+import { cartPageMetadata } from "@/constants/metadata";
 import CartPage from "@/components/sections/cart";
 import { BrowseCategories, Navbar } from "@/components";
 import { Footer, Header, NavigationIndex } from "@/layout";
 
-export const metadata: Metadata = {
-  ...homePageMetadata,
-  title: "New and Sale Badge Product | Pataku",
-  description:
-    "Discover our featured product with new and sale badges. Limited stock available.",
-};
+export const metadata = cartPageMetadata;
 
 export default function NewSaleProductPage() {
   return (
     <main className="min-h-screen bg-white">
-      <Header/>
+      <Header />
       <div className="sticky top-0 z-50 bg-white border-t border-color">
         <div
           className="
@@ -32,7 +26,7 @@ export default function NewSaleProductPage() {
       </div>
       <NavigationIndex />
       <CartPage />
-      <Footer/>
+      <Footer />
     </main>
   );
 }

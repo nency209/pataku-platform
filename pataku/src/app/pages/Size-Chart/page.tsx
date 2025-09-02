@@ -1,5 +1,6 @@
 import SizeChart from "@/components/pages/SizeChart";
-import { NavigationIndex } from "@/layout";
+import { sizeGuideMetadata } from "@/constants/metadata";
+export const metadata=sizeGuideMetadata
 
 export default function LoginHome() {
   return (
