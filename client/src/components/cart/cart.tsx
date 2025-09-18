@@ -1,32 +1,65 @@
 "use client";
-import { useSelector, useDispatch } from "react-redux";
+import {
+  fetchCart,
+  updateQuantity,
+  clearCart,
+  removeFromCart,
+} from "@/redux/cartslice";
 import { RootState, AppDispatch } from "@/redux/store";
-import { removeFromCart, updateQuantity, clearCart } from "@/redux/cartslice";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { Button } from "../ui/button";
+import { Button } from "../ui";
+import { toast } from "react-toastify";
+import { useSelector, useDispatch } from "react-redux";
+import Image from "next/image";
 
 export default function CartPage() {
-  const cart = useSelector((state: RootState) => state.cart.items);
+  const user = useSelector((state: RootState) => state.user.user);
+  const { items } = useSelector((state: RootState) => state.cart);
+
   const dispatch = useDispatch<AppDispatch>();
   const router = useRouter();
 
-  const total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+  // ✅ Fetch cart on mount
+  useEffect(() => {
+    if (user) {
+      dispatch(fetchCart());
+    }
+  }, [dispatch, user]);
 
-  const [localQuantities, setLocalQuantities] = useState(
-    cart.reduce((acc, item) => {
-      acc[item.slug] = item.quantity;
-      return acc;
-    }, {} as Record<string, number>)
+  // ✅ Redirect if not logged in
+  useEffect(() => {
+    if (!user) {
+      toast.info("Please login to view your cart");
+      setTimeout(() => router.push("/login"), 1000);
+    }
+  }, [user, router]);
+
+  const safeItems = Array.isArray(items) ? items : [];
+
+  // ✅ Calculate totals from Redux state (not local state)
+  const total = safeItems.reduce(
+    (acc, item) => acc + item.product.price * item.quantity,
+    0
   );
 
-  if (cart.length === 0) return <p className="p-10">Your cart is empty.</p>;
+  if (!user)
+    return <p className="text-center py-10">Redirecting to login...</p>;
+  if (safeItems.length === 0)
+    return <p className="text-center py-10">Your cart is empty.</p>;
 
-  const handleUpdateCart = () => {
-    Object.entries(localQuantities).forEach(([slug, qty]) => {
-      dispatch(updateQuantity({ slug, quantity: qty }));
-    });
+  // ✅ Handle quantity change (update DB immediately)
+  const handleQuantityChange = (productId: string, value: number) => {
+    const qty = value < 1 ? 1 : value;
+    dispatch(updateQuantity({ productId, quantity: qty }))
+      .unwrap()
+      .then(() => {
+        toast.success("Quantity updated!");
+      })
+      .catch(() => {
+        toast.error("Failed to update quantity");
+      });
   };
 
   return (
@@ -45,59 +78,60 @@ export default function CartPage() {
           </tr>
         </thead>
         <tbody>
-          {cart.map((item) => (
-            <tr key={`${item.slug}-${item.selectedSize || ""}-${item.selectedColor || ""}`} className="border text-center">
+          {safeItems.map((item) => (
+            <tr key={item._id} className="border text-center">
               <td className="p-2 border">
-                <img src={item.image} alt={item.name} className="w-28 mx-auto" />
-              </td>
-              <td className="p-2 border text-left">
-                <p className="font-medium">{item.name}</p>
-                {item.selectedSize && (
-                  <p className="text-xs text-gray-500">Size: {item.selectedSize}</p>
-                )}
-                {item.selectedColor && (
-                  <p className="text-xs text-gray-500 flex items-center gap-1">
-                    Color:{" "}
-                    <span
-                      className="w-4 h-4 inline-block border"
-                      style={{ backgroundColor: item.selectedColor }}
-                    />
-                  </p>
-                )}
-              </td>
-              <td className="p-2 border">${item.price.toFixed(2)}</td>
-              <td className="p-2 border">
-                <input
-                  type="number"
-                  min="1"
-                  value={localQuantities[item.slug] || item.quantity}
-                  onChange={(e) =>
-                    setLocalQuantities({
-                      ...localQuantities,
-                      [item.slug]: parseInt(e.target.value) || 1,
-                    })
+                <Image
+                  src={
+                    item.product.image
+                      ? `http://localhost:8000${item.product.image}`
+                      : "/placeholder.png"
                   }
-                  className="w-16 border text-center"
+                  alt={item.product.name}
+                  width={28}
+                  height={28}
+                  className="relative mx-auto"
                 />
               </td>
+              <td className="p-2 border text-left">
+                <p className="font-medium">{item.product.name}</p>
+              </td>
+              <td className="p-2 border">${item.product.price}</td>
+              <td className="p-2 flex items-center justify-center gap-2">
+                <button
+                  onClick={() =>
+                    handleQuantityChange(item.product._id, item.quantity - 1)
+                  }
+                  className="px-2 py-1 bg-gray-200 rounded hover:bg-gray-300"
+                  disabled={item.quantity <= 1} // prevent going below 1
+                >
+                  –
+                </button>
+                <span className="w-8 text-center">{item.quantity}</span>
+                <button
+                  onClick={() =>
+                    handleQuantityChange(item.product._id, item.quantity + 1)
+                  }
+                  className="px-2 py-1 bg-gray-200 rounded hover:bg-gray-300"
+                >
+                  +
+                </button>
+              </td>
+
               <td className="p-2 border">
-                ${(item.price * (localQuantities[item.slug] || item.quantity)).toFixed(2)}
+                ${item.product.price * item.quantity}
               </td>
               <td className="p-2 border">
-                <Button variant="black" size="lg"
+                <Button
+                  variant="black"
+                  size="lg"
                   onClick={() =>
-                    dispatch(
-                      removeFromCart({
-                        slug: item.slug,
-                        size: item.selectedSize,
-                        color: item.selectedColor,
-                      })
-                    )
+                    dispatch(removeFromCart({ productId: item.product._id }))
                   }
                   className="text-red-500"
                 >
                   ❌
-               </Button>
+                </Button>
               </td>
             </tr>
           ))}
@@ -106,50 +140,39 @@ export default function CartPage() {
 
       {/* Actions */}
       <div className="flex gap-4 mt-4">
-        <Button variant="black" size="lg" onClick={handleUpdateCart} >
-          Update Cart
-       </Button>
         <Link href="/" className="bg-black text-white px-4 py-2">
           Continue Shopping
         </Link>
-        <Button variant="black" size="lg" onClick={() => dispatch(clearCart())} >
+        <Button variant="black" size="lg" onClick={() => dispatch(clearCart())}>
           Clear Cart
-       </Button>
+        </Button>
       </div>
 
       {/* Totals */}
-      <div className="grid md:grid-cols-2 grid-cols-1 gap-6  mt-10 ">
-        <div >
-          <h2 className="text-lg font-semibold mb-2">Get shipping estimates</h2>
-          <select className="w-56 border px-2 py-1 mb-2 mx-2">
-            <option>---</option>
-            <option>USA</option>
-            <option>India</option>
-            <option>UK</option>
-          </select>
-          <input type="text" placeholder="Zip/Postal Code" className="w-52 border px-2 py-1 mb-2" />
-          <Button variant="black" size="lg" >Calculate shipping</Button >
-        </div>
+      <div className="grid md:grid-cols-2 grid-cols-1 gap-6 mt-10">
+        
         <div>
           <h2 className="text-lg font-semibold mb-2">Cart Totals</h2>
           <table className="w-full border">
             <tbody>
               <tr>
                 <td className="p-2 border">Subtotal</td>
-                <td className="p-2 border">${total.toFixed(2)}</td>
+                <td className="p-2 border">${total}</td>
               </tr>
               <tr>
                 <td className="p-2 border">Total</td>
-                <td className="p-2 border">${total.toFixed(2)}</td>
+                <td className="p-2 border">${total}</td>
               </tr>
             </tbody>
           </table>
-          <Button variant="black" size="lg"
+          <Button
+            variant="black"
+            size="lg"
             onClick={() => router.push("/Checkout")}
             className="mt-4"
           >
             Proceed to Checkout
-         </Button>
+          </Button>
         </div>
       </div>
     </div>

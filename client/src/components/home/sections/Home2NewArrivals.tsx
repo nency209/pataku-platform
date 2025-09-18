@@ -1,12 +1,28 @@
 "use client";
 import { useState, useEffect } from "react";
 import ProductCard from "@/components/product/ProductCard";
-import { newArrivalsProducts } from "@/constants";
 import { Button } from "../../ui/button";
+import { Product } from "@/types/Product";
+import api from "@/utils/api";
+import { toast } from "react-toastify";
 
 export default function Home2NewArrivals() {
   const [startIndex, setStartIndex] = useState(0);
   const [visibleCount, setVisibleCount] = useState(3);
+  const [products, setProducts] = useState<Product[]>([]);
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const res = await api.get("/products");
+        setProducts(res.data);
+      } catch (err: any) {
+        toast.error(err.response?.data?.message || "Failed to load products");
+      }
+    };
+
+    fetchProducts();
+  }, []);
 
   // ✅ Update visibleCount based on screen size
   useEffect(() => {
@@ -27,7 +43,7 @@ export default function Home2NewArrivals() {
   }, []);
 
   const handleNext = () => {
-    if (startIndex < newArrivalsProducts.length - visibleCount) {
+    if (startIndex < products.length - visibleCount) {
       setStartIndex(startIndex + 1);
     }
   };
@@ -108,20 +124,23 @@ export default function Home2NewArrivals() {
               transform: `translateX(-${startIndex * (100 / visibleCount)}%)`,
             }}
           >
-            {newArrivalsProducts.map((product, index) => (
+            {products.map((product, index) => (
               <div
                 key={index}
                 className={`flex-shrink-0 px-6 `}
                 style={{ width: `${100 / visibleCount}%` }} // ✅ dynamic width
               >
                 <ProductCard
-                  slug={product.slug}
+                  _id={product._id}
                   name={product.name}
                   price={product.price}
-                  badges={product.badges}
-                  discount={product.discount}
+                  status={product.status}
                   image={product.image}
                   oldprice={product.oldprice}
+                  discount={product.discount}
+                  category={product.category}
+                  stock={product.stock}
+                  created={product.created}
                 />
               </div>
             ))}

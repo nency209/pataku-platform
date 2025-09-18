@@ -1,110 +1,92 @@
-'use client'
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import type { CartItem } from "@/types/cartitem";
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import api from "@/utils/api";
+import { initialState } from "@/types";
 
-type AddToCartPayload = {
-  slug: string;
-  name: string;
-  price: number;
-  image: string;
-  size?: string;
-  color?: string;
-  quantity?: number;
-};
+export const addToCart = createAsyncThunk(
+  "cart/addToCart",
+  async ({ productId, quantity }: { productId: string; quantity: number }) => {
+    const { data } = await api.post("/cart", { productId, quantity });
+    return data;
+  }
+);
 
-type UpdateQuantityPayload = {
-  slug: string;
-  quantity: number;
-  size?: string;
-  color?: string;
-};
 
-type RemovePayload = {
-  slug: string;
-  size?: string | null;
-  color?: string | null;
-};
+export const updateQuantity = createAsyncThunk(
+  "cart/updateQuantity",
+  async (
+    { productId, quantity }: { productId: string; quantity: number },
+    thunkAPI
+  ) => {
+    try {
+      const { data } = await api.put(`/cart/${productId}`, { quantity });
+      return data;
+    } catch (err: any) {
+      return thunkAPI.rejectWithValue(
+        err.response?.data || "Failed to update quantity"
+      );
+    }
+  }
+);
 
-interface CartState {
-  items: CartItem[];
-}
 
-const initialState: CartState = {
-  items: [],
-};
+export const fetchCart = createAsyncThunk("cart/fetchCart", async () => {
+  const { data } = await api.get("/cart");
+  return data;
+});
+
+
+export const removeFromCart = createAsyncThunk(
+  "cart/removeFromCart",
+  async ({ productId }: { productId: string }, thunkAPI) => {
+    try {
+      const { data } = await api.delete(`/cart/${productId}`);
+      return data;
+    } catch (err: any) {
+      return thunkAPI.rejectWithValue(
+        err.response?.data || "Failed to remove item"
+      );
+    }
+  }
+);
 
 const cartSlice = createSlice({
   name: "cart",
   initialState,
   reducers: {
-    // add item (merges by slug+size+color)
-    addToCart: (state, action: PayloadAction<AddToCartPayload>) => {
-      const p = action.payload;
-      const existing = state.items.find(
-        (it) =>
-          it.slug === p.slug &&
-          (it.selectedSize ?? "") === (p.size ?? "") &&
-          (it.selectedColor ?? "") === (p.color ?? "")
-      );
-
-      if (existing) {
-        existing.quantity += p.quantity ?? 1;
-      } else {
-        state.items.push({
-          slug: p.slug,
-          name: p.name,
-          price: p.price,
-          image: p.image,
-          selectedSize: p.size,
-          selectedColor: p.color,
-          quantity: p.quantity ?? 1,
-        });
-      }
-    },
-
-    // update quantity: if size/color provided, update that unique item; otherwise update all items with that slug
-    updateQuantity: (state, action: PayloadAction<UpdateQuantityPayload>) => {
-      const { slug, quantity, size, color } = action.payload;
-      state.items.forEach((it) => {
-        if (
-          it.slug === slug &&
-          (size === undefined || (it.selectedSize ?? "") === size) &&
-          (color === undefined || (it.selectedColor ?? "") === color)
-        ) {
-          it.quantity = Math.max(1, quantity);
-        }
-      });
-    },
-
-    removeFromCart: (state, action: PayloadAction<RemovePayload>) => {
-      const { slug, size, color } = action.payload;
-      state.items = state.items.filter(
-        (it) =>
-          !(
-            it.slug === slug &&
-            (it.selectedSize ?? "") === (size ?? "") &&
-            (it.selectedColor ?? "") === (color ?? "")
-          )
-      );
-    },
-
     clearCart: (state) => {
       state.items = [];
     },
+  },
+  extraReducers: (builder) => {
+    builder
+      .addCase(addToCart.fulfilled, (state, action) => {
+        state.items = action.payload.items;
+      })
+      .addCase(fetchCart.fulfilled, (state, action) => {
+        state.items = action.payload.items;
+      })
+      .addCase(updateQuantity.fulfilled, (state, action) => {
+        const updatedItem = action.payload.items.find(
+          (i: any) => i.product._id === action.meta.arg.productId
+        );
+        if (updatedItem) {
+          const index = state.items.findIndex(
+            (i) => i.product._id === action.meta.arg.productId
+          );
+          if (index !== -1) state.items[index].quantity = updatedItem.quantity;
+        }
+      })
+     
+        .addCase(removeFromCart.fulfilled, (state, action) => {
+  const removedId = action.meta.arg.productId;
+  state.items = state.items.filter(
+    (item) => item.product._id !== removedId
+  );
 
-    // rehydrate (used by Provider to restore from localStorage on client)
-    rehydrateCart: (state, action: PayloadAction<CartItem[]>) => {
-      state.items = action.payload ?? [];
-    },
+
+      });
   },
 });
 
-export const {
-  addToCart,
-  updateQuantity,
-  removeFromCart,
-  clearCart,
-  rehydrateCart,
-} = cartSlice.actions;
-
+export const { clearCart } = cartSlice.actions;
 export default cartSlice.reducer;

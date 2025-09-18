@@ -1,153 +1,79 @@
 "use client";
-import { useMemo, useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
-import { productsdetail } from "@/constants/Productdetails";
+import { Product } from "@/types";
+import api from "@/utils/api";
 import { Button } from "../ui/button";
 import Link from "next/link";
-import { ShieldCheck, Truck, Undo2, Heart } from "lucide-react";
+import { ShieldCheck, Truck, Undo2, Heart, IndianRupee } from "lucide-react";
 import Image from "next/image";
-
-// Redux
 import { useAppDispatch } from "@/redux/hook";
 import { addToCart } from "@/redux/cartslice";
 import { addToWishlist } from "@/redux/wishlistslice";
+import { toast } from "react-toastify";
 
 export default function ProductPage() {
-  const params = useParams<{ slug: string }>();
-const slug = params.slug;
+  const { slug } = useParams<{ slug: string }>();
   const router = useRouter();
-  const products = productsdetail;
 
-  const product = useMemo(() => products.find((p) => p.slug === slug), [slug]);
+  const [product, setProduct] = useState<Product | null>(null);
+  const [loading, setLoading] = useState(true);
 
   // Default states
   const [quantity, setQuantity] = useState(1);
   const [showPopup, setShowPopup] = useState(false);
-  const [thumbIndex, setThumbIndex] = useState(0);
-  const [selectedSize, setSelectedSize] = useState("");
-  const [selectedColor, setSelectedColor] = useState("");
   const [selectedImage, setSelectedImage] = useState("");
 
-  useEffect(() => {
-    if (product) {
-      setSelectedImage(product.categories?.[0] || product.image);
-      setSelectedSize(product.sizes?.[0] || "");
-      setSelectedColor(product.colors?.[0] || "");
-    }
-  }, [product]);
-
   const dispatch = useAppDispatch();
+  const { id } = useParams<{ id: string }>();
+
+  useEffect(() => {
+    async function fetchProduct() {
+      try {
+        const { data } = await api.get(`/products/${id}`);
+        setProduct(data);
+        setSelectedImage(data.images?.[0] || data.image);
+      } catch (err) {
+        console.error("❌ Failed to fetch product:", err);
+      } finally {
+        setLoading(false);
+      }
+    }
+    if (id) fetchProduct();
+  }, [id]);
 
   const handleAddToCart = () => {
     if (!product) return;
-    dispatch(
-      addToCart({
-        slug: product.sku,
-        name: product.name,
-        price: product.price,
-        image: selectedImage,
-        size: selectedSize,
-        color: selectedColor,
-        quantity,
-      })
-    );
+    dispatch(addToCart({ productId: product._id, quantity }));
     setShowPopup(true);
   };
 
-  const handleAddToWishlist = () => {
+  const handleAddToWishlist = async () => {
     if (!product) return;
-    dispatch(
-      addToWishlist({
-        slug: product.sku,
-        name: product.name,
-        price: product.price,
-        image: selectedImage,
-      })
-    );
+    try {
+      await dispatch(addToWishlist(product._id)).unwrap();
+      toast.success("Added to wishlist!");
+    } catch (err: any) {
+      toast.error(err || "Failed to add to wishlist");
+    }
   };
 
-  if (!product) return <div>Product not found</div>;
+  if (loading) return <p className="text-center py-10">Loading...</p>;
+  if (!product) return <p className="text-center py-10">Product not found</p>;
 
   return (
     <div className="mx-auto xl:max-w-6xl lg:max-w-4xl md:max-w-2xl px-4 sm:px-6 lg:px-0 py-6">
       <div className="grid grid-cols-1 gap-8 lg:grid-cols-2">
         {/* Left side: images */}
-        <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
-          {/* Thumbnails */}
-          <div className="col-span-1 flex sm:flex-col items-center sm:items-start relative sm:w-32 sm:py-6">
-            <button
-              className="hidden sm:block mb-2 px-4 py-1  rounded absolute bg-white text-muted border border-color top-2 z-10 left-8"
-              onClick={() => setThumbIndex((prev) => Math.max(0, prev - 1))}
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 24 24"
-                width="20"
-                height="20"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                className="lucide lucide-chevron-up-icon lucide-chevron-up"
-              >
-                <path d="m18 15-6-6-6 6" />
-              </svg>
-            </button>
-
-            <div className="overflow-hidden h-auto sm:h-[420px] flex sm:justify-center">
-              <div
-                className="flex sm:flex-col transition-transform duration-500 ease-in-out"
-                style={{
-                  transform: `translateY(-${thumbIndex * 140}px)`,
-                }}
-              >
-                {product.categories.map((img, i) => (
-                  <Image
-                    key={i}
-                    src={img}
-                    width={112}
-                    height={128}
-                    alt={`${product.name} ${i}`}
-                    onClick={() => setSelectedImage(img)}
-                    className={`cursor-pointer border w-20 h-20 sm:w-28 sm:h-32 object-cover mb-2 sm:mb-4 ${
-                      selectedImage === img ? "border-black" : "border-gray-300"
-                    }`}
-                  />
-                ))}
-              </div>
-            </div>
-
-            <button
-              className="hidden sm:block mt-2 px-4 py-1 bg-white text-muted border border-color left-8  rounded absolute bottom-60 z-10"
-              onClick={() =>
-                setThumbIndex((prev) =>
-                  Math.min(product.categories.length - 3, prev + 1)
-                )
-              }
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="20"
-                height="20"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                className="lucide lucide-chevron-down-icon lucide-chevron-down"
-              >
-                <path d="m6 9 6 6 6-6" />
-              </svg>
-            </button>
-          </div>
-
-          {/* Big main image */}
-          <div className="col-span-1 sm:col-span-3">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <div className="sm:col-span-3">
             {selectedImage && (
               <Image
-                src={selectedImage}
+                src={
+                  selectedImage
+                    ? `http://localhost:8000${selectedImage}`
+                    : "/placeholder.png"
+                }
                 alt={product.name}
                 width={600}
                 height={600}
@@ -163,67 +89,24 @@ const slug = params.slug;
           <h1 className="text-lg sm:text-xl font-light font-lato">
             {product.name}
           </h1>
-          <p className="text-sm text-muted font-rubik">SKU: {product.sku}</p>
+
           <p className="text-black text-[13px] font-rubik font-light">
-            {product.stock && product.stock > 0
-              ? `${product.stock} in stock`
-              : "Out of Stock"}
+            {product.stock && product.stock > 0 ? ` In stock` : "Out of Stock"}
           </p>
 
           {/* Prices */}
           <div className="flex flex-wrap gap-2 items-center my-2 text-2xl sm:text-[28px] font-rubik font-light text-primary">
-            {product.oldPrice && (
-              <span className="line-through text-gray-500">
-                ${product.oldPrice}.00
+            {product.oldprice && (
+              <span className="line-through text-gray-500 flex justify-center items-center">
+                <IndianRupee />
+                {product.oldprice}
               </span>
             )}
-            <span>${product.price}.00</span>
+            <span className="flex justify-center items-center">
+              <IndianRupee />
+              {product.price}
+            </span>
           </div>
-
-          {product.unitPrice && (
-            <p className="text-black text-[13px] font-rubik font-light">
-              {product.unitPrice}
-            </p>
-          )}
-
-          <p className="py-4 text-[13px] font-rubik font-light text-muted border-b border-color">
-            {product.description}
-          </p>
-
-          {/* Sizes */}
-          {product.sizes && (
-            <div className="flex flex-wrap gap-2 pt-6">
-              <span className="text-sm">Size:</span>
-              {product.sizes.map((s) => (
-                <button
-                  key={s}
-                  className={`px-2 py-1 border text-sm ${
-                    selectedSize === s ? "border-black" : "border-gray-300"
-                  }`}
-                  onClick={() => setSelectedSize(s)}
-                >
-                  {s}
-                </button>
-              ))}
-            </div>
-          )}
-
-          {/* Colors */}
-          {product.colors && (
-            <div className="flex flex-wrap gap-2 pt-6">
-              <span className="text-sm">Color:</span>
-              {product.colors.map((c) => (
-                <div
-                  key={c}
-                  className={`w-6 h-6 border cursor-pointer ${
-                    selectedColor === c ? "border-black" : "border-gray-300"
-                  }`}
-                  style={{ backgroundColor: c }}
-                  onClick={() => setSelectedColor(c)}
-                />
-              ))}
-            </div>
-          )}
 
           {/* Actions */}
           <div className="flex flex-wrap gap-4 mt-4">
@@ -368,14 +251,20 @@ const slug = params.slug;
             </button>
             <div className="flex gap-4">
               <Image
-                src={selectedImage}
+                src={
+                  selectedImage
+                    ? `http://localhost:8000${selectedImage}`
+                    : "/placeholder.png"
+                }
                 alt={product.name}
                 width={112}
                 height={112}
                 className="w-28 h-28 object-contain"
               />
               <div className="space-y-2">
-                <p className="text-lg font-semibold">{product.name}</p>
+                <p className="text-lg font-semibold line-clamp-3">
+                  {product.name}
+                </p>
                 <p className="text-green-600">✔️ Added to cart successfully!</p>
                 <div className="flex gap-2">
                   <button

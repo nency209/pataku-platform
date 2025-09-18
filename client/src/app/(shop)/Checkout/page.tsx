@@ -3,6 +3,6 @@ import CheckoutPage from "@/components/checkout/checkout";
 
 export const metadata = checkoutPageMetadata;
 
-export default function RegisterHome() {
+export default function checkoutPage() {
   return <CheckoutPage />;
 }

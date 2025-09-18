@@ -1,12 +1,15 @@
 export interface Product {
-  slug: string;
-  name: string;
-  price: number;
-  oldprice?: number;
+
+  _id: string;
   image: string;
-  category?: string;
-  badges?: ("SALE" | "NEW" | "SOLD OUT")[];
-  description?: string;
- countdown?: number[];
-  discount?: number;
+  name: string;
+  category: string;
+  price: string;
+  stock: number;
+  status: string;
+  oldprice?:number;
+  created: string;
+  discount?:number;
+ 
+
 }

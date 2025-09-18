@@ -1,12 +1,14 @@
 "use client";
+import { useEffect, useState } from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { useAppSelector, useAppDispatch } from "@/redux/hook";
-import { clearCart } from "@/redux/cartslice";
+import { clearCart, fetchCart } from "@/redux/cartslice";
 import loadScript from "@/utils/loadscript";
-import Link from "next/link";
-import { useState } from "react";
+import api from "@/utils/api";
 import Image from "next/image";
+import Link from "next/link";
+import { IndianRupee } from "lucide-react";
 
 const Schema = Yup.object({
   email: Yup.string().email("Invalid").required("Required"),
@@ -22,42 +24,41 @@ const Schema = Yup.object({
 });
 
 export default function CheckoutPage() {
-  const cart = useAppSelector((state) => state.cart.items);
   const dispatch = useAppDispatch();
-  const total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+  const cart = useAppSelector((state) => state.cart.items);
+
+  // fetch cart data on mount
+  useEffect(() => {
+    dispatch(fetchCart());
+  }, [dispatch]);
 
   const [billingSame, setBillingSame] = useState(true);
   const [isPaying, setIsPaying] = useState(false);
 
+  // calculate totals
+  const subtotal = cart.reduce(
+    (sum, item) => sum + item.product.price * item.quantity,
+    0
+  );
+
+  const discount = cart.reduce((sum, item) => {
+    if (!item.discount) return sum;
+    return sum + (item.product.price * item.quantity * item.discount) / 100;
+  }, 0);
+
+  const grandTotal = subtotal - discount;
+
   const onSubmit = async (values: any) => {
-    if (values.paymentMethod === "cod") {
-      alert("✅ Order placed with Cash on Delivery!");
-      dispatch(clearCart());
-      return;
-    }
-
     setIsPaying(true);
-
-    const ok = await loadScript("https://checkout.razorpay.com/v1/checkout.js");
-    if (!ok) {
-      alert("❌ Failed to load Razorpay SDK");
-      setIsPaying(false);
-      return;
-    }
-
     try {
-      const res = await fetch("/api/razorpay/order", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ amount: Math.round(total * 100) }), // amount in paise
-      });
+      const ok = await loadScript(
+        "https://checkout.razorpay.com/v1/checkout.js"
+      );
+      if (!ok) throw new Error("Razorpay SDK failed to load");
 
-      const data = await res.json();
-      if (!res.ok) {
-        alert(data?.error || "Order creation failed");
-        setIsPaying(false);
-        return;
-      }
+      const { data } = await api.post("/orders/razorpay/order", {
+        amount: Math.round(grandTotal * 100),
+      });
 
       const rzp = new (window as any).Razorpay({
         key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
@@ -66,7 +67,17 @@ export default function CheckoutPage() {
         order_id: data.orderId,
         name: "Pataku Demo Store",
         description: "Order Payment",
-        handler: (response: any) => {
+        handler: async (response: any) => {
+          await api.post("/orders/create", {
+            customer: values,
+            items: cart,
+            totals: { subtotal, discount, grandTotal },
+            paymentStatus: "paid",
+            razorpayPaymentId: response.razorpay_payment_id,
+
+            razorpayOrderId: response.razorpay_order_id,
+            razorpaySignature: response.razorpay_signature,
+          });
           alert(`✅ Payment successful! ID: ${response.razorpay_payment_id}`);
           dispatch(clearCart());
         },
@@ -74,7 +85,6 @@ export default function CheckoutPage() {
           name: `${values.firstName} ${values.lastName}`,
           email: values.email,
         },
-        notes: { cart: JSON.stringify(cart) },
         theme: { color: "#8B5CF6" },
       });
 
@@ -83,7 +93,6 @@ export default function CheckoutPage() {
       console.error(err);
       alert("⚠️ Payment failed, please try again.");
     }
-
     setIsPaying(false);
   };
 
@@ -102,19 +111,19 @@ export default function CheckoutPage() {
               firstName: "",
               lastName: "",
               address: "",
-              apartment: "", // ✅ add this
+              apartment: "",
               city: "",
               state: "",
               pincode: "",
-              paymentMethod: "cod",
-              offers: false, // ✅ for "Email me with offers"
-              saveInfo: false, // ✅ for "Save info"
+              paymentMethod: "razorpay",
+              offers: false,
+              saveInfo: false,
             }}
             validationSchema={Schema}
             onSubmit={onSubmit}
           >
             {({ isSubmitting, values, setFieldValue }) => (
-              <Form className="space-y-5 ">
+              <Form className="space-y-5 w-full">
                 {/* Contact */}
                 <div>
                   <div className="flex justify-between items-center mb-2">
@@ -148,7 +157,7 @@ export default function CheckoutPage() {
                   <div className="grid grid-cols-2 gap-2">
                     <Field
                       name="firstName"
-                      placeholder="First name (optional)"
+                      placeholder="First name"
                       className="border border-gray-300 rounded-md p-2"
                     />
                     <Field
@@ -196,14 +205,7 @@ export default function CheckoutPage() {
                   <p className="text-xs text-gray-500 mb-2">
                     All transactions are secure and encrypted.
                   </p>
-                  <label className="flex items-center justify-between border border-gray-300 rounded-md p-3 cursor-pointer">
-                    <span>Cash on Delivery (COD)</span>
-                    <input
-                      type="radio"
-                      checked={values.paymentMethod === "cod"}
-                      onChange={() => setFieldValue("paymentMethod", "cod")}
-                    />
-                  </label>
+
                   <label className="flex items-center justify-between border border-gray-300 rounded-md p-3 cursor-pointer">
                     <span>Pay Online (Razorpay)</span>
                     <input
@@ -213,29 +215,6 @@ export default function CheckoutPage() {
                         setFieldValue("paymentMethod", "razorpay")
                       }
                     />
-                  </label>
-                </div>
-
-                {/* Billing address */}
-                <div>
-                  <h2 className="font-semibold text-lg mb-2">
-                    Billing address
-                  </h2>
-                  <label className="flex items-center gap-2 border border-gray-300 rounded-md p-3 cursor-pointer">
-                    <input
-                      type="radio"
-                      checked={billingSame}
-                      onChange={() => setBillingSame(true)}
-                    />
-                    Same as shipping address
-                  </label>
-                  <label className="flex items-center gap-2 border border-gray-300 rounded-md p-3 cursor-pointer mt-2">
-                    <input
-                      type="radio"
-                      checked={!billingSame}
-                      onChange={() => setBillingSame(false)}
-                    />
-                    Use a different billing address
                   </label>
                 </div>
 
@@ -253,43 +232,59 @@ export default function CheckoutPage() {
 
         {/* Right side summary */}
         <div className="px-8 py-6 flex justify-start bg-header">
-          <div className="space-y-4 px-4">
-            {cart.map((i) => (
-              <div
-                key={`${i.slug}-${i.selectedColor}-${i.selectedSize}`}
-                className="flex items-center justify-between gap-16"
-              >
-                <div className="flex items-center">
+          <div className="space-y-4 px-4 w-full">
+            {cart.map((item, i) => (
+              <div key={i} className="flex items-center justify-between gap-4">
+                <div className="flex items-center gap-2">
                   <Image
-                    src={i.image}
-                    alt={i.name}
+                    src={
+                      item.product.image
+                        ? `http://localhost:8000${item.product.image}`
+                        : "placeholder.png"
+                    }
+                    alt={item.product?.name || "product image"}
                     width={64}
                     height={64}
                     className="w-16 h-16 border rounded-md border-color"
                   />
                   <div>
-                    <p className="text-sm">{i.name}</p>
-                    <p className="text-sm">
-                      ({i.selectedSize}/{i.selectedColor})
+                    <p className="text-sm font-medium line-clamp-2">
+                      {item.product.name}
+                    </p>
+                    <p className="text-sm text-gray-700">
+                      Qty: {item.quantity}
                     </p>
                   </div>
                 </div>
-                <span>${i.price * i.quantity}</span>
+                <span className="flex items-center">
+                  <IndianRupee size={14} />
+                  {item.product.price * item.quantity}
+                </span>
               </div>
             ))}
+
             <hr />
             <div className="flex justify-between text-sm">
               <span>Subtotal</span>
-              <span>${total}</span>
+              <span className="flex items-center">
+                <IndianRupee size={14} />
+                {subtotal}
+              </span>
             </div>
             <div className="flex justify-between text-sm">
-              <span>Shipping</span>
-              <span className="text-gray-500">Enter shipping address</span>
+              <span>Discount</span>
+              <span className="flex items-center">
+                <IndianRupee size={14} />
+                {discount}
+              </span>
             </div>
             <hr />
             <div className="flex justify-between font-semibold text-lg">
               <span>Total</span>
-              <span>USD ${total}</span>
+              <span className="flex items-center">
+                <IndianRupee size={18} />
+                {grandTotal}
+              </span>
             </div>
           </div>
         </div>

@@ -1,20 +1,37 @@
 "use client";
 import ProductCard from "@/components/product/ProductCard";
 import Image from "next/image";
-import { newArrivalsProducts } from "@/constants";
+
 import { motion } from "framer-motion";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "../../ui/button";
+import api from "@/utils/api";
+import { toast } from "react-toastify";
+import { Product } from "@/types/Product";
 
 export default function BottomSections() {
   const [index, setIndex] = useState(0);
   const [currentColumn, setCurrentColumn] = useState(0);
+  const [products, setProducts] = useState<Product[]>([]);
   const itemsPerPage = 2;
   const popularitemsPerPage = 6; // 2 columns × 3 rows
-  const totalColumns = Math.ceil(newArrivalsProducts.length / 3); // since 3 rows per column
+  const totalColumns = Math.ceil(products.length / 3); // since 3 rows per column
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const res = await api.get("/products");
+        setProducts(res.data);
+      } catch (err: any) {
+        toast.error(err.response?.data?.message || "Failed to load products");
+      }
+    };
+
+    fetchProducts();
+  }, []);
 
   const nextSlide = () => {
-    if (index < newArrivalsProducts.length - itemsPerPage) {
+    if (index < products.length - itemsPerPage) {
       setIndex(index + 1);
     }
   };
@@ -45,10 +62,10 @@ export default function BottomSections() {
           <div className="relative">
             <div className="mb-4 md:mb-8">
               <h2 className="text-2xl sm:text-[28px] lg:text-[32px] font-bold font-lato text-black mb-2">
-                Deals{" "}
+                Deals
                 <span className="italic text-2xl sm:text-[28px] lg:text-[32px] font-light font-lato text-black">
                   of The
-                </span>{" "}
+                </span>
                 Week
               </h2>
               <p className="text-sm sm:text-base text-muted font-rubik font-light">
@@ -64,12 +81,25 @@ export default function BottomSections() {
                 animate={{ x: `-${index * (100 / itemsPerPage)}%` }}
                 transition={{ type: "tween", duration: 0.5 }}
               >
-                {newArrivalsProducts.map((product, i) => (
+                {products.map((product, i) => (
                   <div
                     key={i}
                     className="w-48 sm:w-28 md:w-72 lg:w-48  xl:w-64 flex-shrink-0 "
                   >
-                    <ProductCard {...product} />
+                    <div key={i} className="p-2">
+                      <ProductCard
+                        _id={product._id}
+                        name={product.name}
+                        price={product.price}
+                        status={product.status}
+                        image={product.image}
+                        oldprice={product.oldprice}
+                        discount={product.discount}
+                        category={product.category}
+                        stock={product.stock}
+                        created={product.created}
+                      />
+                    </div>
                   </div>
                 ))}
               </motion.div>
@@ -100,7 +130,7 @@ export default function BottomSections() {
 
             <Button
               onClick={nextSlide}
-              disabled={index === newArrivalsProducts.length - 1}
+              disabled={index === products.length - 1}
               variant="outline"
               className="absolute right-2 sm:right-4 bottom-24 sm:bottom-40 -translate-y-1/2 disabled:opacity-50"
             >
@@ -125,10 +155,10 @@ export default function BottomSections() {
           <div className="relative">
             <div className="mb-6 md:mb-8">
               <h2 className="text-2xl sm:text-[28px] lg:text-[32px] font-bold font-lato text-black mb-2">
-                Some{" "}
+                Some
                 <span className="italic text-2xl sm:text-[28px] lg:text-[32px] font-light font-lato text-black">
                   Popular
-                </span>{" "}
+                </span>
                 Products
               </h2>
               <p className="text-sm sm:text-base text-muted font-rubik font-light">
@@ -147,33 +177,40 @@ export default function BottomSections() {
                     key={colIndex}
                     className="grid grid-cols-1 grid-rows-3 gap-y-6 sm:gap-y-8 w-[85%] sm:w-1/2 flex-shrink-0"
                   >
-                    {newArrivalsProducts
+                    {products
                       .slice(colIndex * 3, colIndex * 3 + 3)
                       .map((product, idx) => (
                         <div
                           key={idx}
-                          className="flex items-center gap-3 sm:gap-4 border-gray-200"
+                          className="flex items-center gap-3 sm:gap-4  w-28 h-28"
                         >
-                          <div className="w-20 h-20 sm:w-24 sm:h-24 flex-shrink-0 mt-2">
+                          <div className="w-24 h-28 sm:w-24 sm:h-28 flex-shrink-0 ">
                             <Image
-                              src={product.image}
+                              src={
+                                product.image
+                                  ? `http://localhost:8000${product.image}`
+                                  : "/placeholder.png"
+                              }
                               alt={product.name}
-                              width={96}
-                              height={96}
+                              width={90}
+                              height={90}
                               className="object-cover"
                             />
                           </div>
-                          <div className="flex flex-col gap-1 px-1 sm:px-2">
-                            <span className="text-sm sm:text-base font-light text-black font-rubik">
+                          <div className="flex flex-col gap-1 px-1">
+                            <h3
+                              className="text-sm sm:text-base font-light text-black font-rubik line-clamp-2 hover:cursor-pointer"
+                              title={product.name}
+                            >
                               {product.name}
-                            </span>
+                            </h3>
                             <span className="text-sm sm:text-base font-light text-muted font-rubik">
                               {product.oldprice && (
                                 <span className="text-xs sm:text-sm font-light text-muted font-rubik px-1 sm:px-2 line-through">
-                                  ${product.oldprice.toFixed(2)}
+                                  ₹{product.oldprice}
                                 </span>
                               )}
-                              ${product.price}
+                              ₹{product.price}
                             </span>
                           </div>
                         </div>

@@ -1,18 +1,31 @@
 "use client";
 import Image from "next/image";
 import { useState, useEffect } from "react";
-import { newArrivalsProducts } from "@/constants";
+import { Product } from "@/types/Product";
 import { motion } from "framer-motion";
 import { Button } from "../../ui/button";
+import api from "@/utils/api";
+import { toast } from "react-toastify";
 
 export default function DiningRoomProduct() {
   const tabs = ["Featured Product", "Chair", "Sofa"];
   const [active, setActive] = useState(0);
   const [index, setIndex] = useState(0);
-  const products = newArrivalsProducts;
+  const [products, setproducts] = useState<Product[]>([]);
 
-  // responsive items per view
   const [itemsPerView, setItemsPerView] = useState(1);
+
+  useEffect(() => {
+    const fetchproducts = async () => {
+      try {
+        const res = await api.get("/products");
+        setproducts(res.data);
+      } catch (err: any) {
+        toast.error(err.response?.data?.message || err.message);
+      }
+    };
+    fetchproducts();
+  }, []);
 
   useEffect(() => {
     const updateItemsPerView = () => {
@@ -82,28 +95,33 @@ export default function DiningRoomProduct() {
                       .map((product, idx) => (
                         <div
                           key={idx}
-                          className="flex items-center text-center"
+                          className="flex items-center gap-3 sm:gap-4  w-28 h-28"
                         >
-                          <div className="relative w-24 h-24">
+                          <div className="w-24 h-28 sm:w-24 sm:h-28 flex-shrink-0 ">
                             <Image
-                              src={product.image}
+                              src={
+                                product.image
+                                  ? `http://localhost:8000${product.image}`
+                                  : "/placeholder.png"
+                              }
                               alt={product.name}
-                              fill
-                              className="object-contain"
+                              width={90}
+                              height={90}
+                              className="object-cover"
                             />
                           </div>
                           <div className="mt-1 flex flex-col">
-                            <p className="mt-2 text-base font-light font-rubik text-black text-hover hover:cursor-pointer">
+                            <p className="mt-2 text-base font-light font-rubik text-black text-hover hover:cursor-pointer line-clamp-2">
                               {product.name}
                             </p>
                             <div>
                               {product.oldprice && (
                                 <span className="text-sm font-light font-rubik text-muted line-through mr-2">
-                                  ${product.oldprice.toFixed(2)}
+                                 ₹{product.oldprice}
                                 </span>
                               )}
                               <span className="text-base font-light font-rubik text-primary">
-                                ${product.price.toFixed(2)}
+                                ₹{product.price}
                               </span>
                             </div>
                           </div>

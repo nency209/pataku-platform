@@ -1,11 +1,8 @@
-// Layout components
-export * from '../app/layout'
-
-// Section components
+export * from './info'
 export * from './home/sections'
-
-// Product components
+export * from './auth'
+export * from './cart'
 export * from './product'
-
-// Blog components
 export * from './blog'
+export * from './product'
+export * from './shop'

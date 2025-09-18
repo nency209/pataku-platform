@@ -1,6 +1,6 @@
-import SizeChart from "@/components/pages/SizeChart";
+import SizeChart from "@/components/info/SizeChart";
 import { sizeGuideMetadata } from "@/constants/metadata";
-export const metadata=sizeGuideMetadata
+export const metadata = sizeGuideMetadata;
 
 export default function LoginHome() {
   return (

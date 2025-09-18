@@ -1,15 +1,31 @@
 "use client";
 import ProductCard from "@/components/product/ProductCard";
-import { newArrivalsProducts } from "@/constants";
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Button } from "../../ui/button";
+import { Product } from "@/types/Product";
+import api from "@/utils/api";
+import { toast } from "react-toastify";
 
 export default function NewArrivals() {
   const [index, setIndex] = useState(0);
   const [visibleCols, setVisibleCols] = useState(5);
+  const [products, setProducts] = useState<Product[]>([]);
 
-  const columns = Math.ceil(newArrivalsProducts.length / 2);
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const res = await api.get("/products");
+        setProducts(res.data);
+      } catch (err: any) {
+        toast.error(err.response?.data?.message || "Failed to load products");
+      }
+    };
+
+    fetchProducts();
+  }, []);
+
+  const columns = Math.ceil(products.length / 2);
 
   // Responsive visibleCols based on screen size
   useEffect(() => {
@@ -46,10 +62,10 @@ export default function NewArrivals() {
         {/* Header */}
         <div className="text-center mb-8 md:mb-12">
           <h2 className="text-[28px] md:text-[32px] font-bold font-lato text-black mb-2">
-            New{" "}
+            New
             <span className="italic font-light font-lato text-black">
               Collections
-            </span>{" "}
+            </span>
             Of Arrivals
           </h2>
           <p className="text-muted font-rubik font-light text-sm md:text-base">
@@ -71,18 +87,21 @@ export default function NewArrivals() {
                   key={colIdx}
                   className="grid grid-rows-2 min-w-[100%] sm:min-w-[33.33%] xl:min-w-[20%] lg:min-w-[25%] "
                 >
-                  {newArrivalsProducts
+                  {products
                     .slice(colIdx * 2, colIdx * 2 + 2) // 2 per column
                     .map((product, idx) => (
                       <div key={idx} className="p-2">
                         <ProductCard
-                          slug={product.slug}
+                          _id={product._id}
                           name={product.name}
                           price={product.price}
-                          badges={product.badges}
+                          status={product.status}
                           image={product.image}
                           oldprice={product.oldprice}
                           discount={product.discount}
+                          category={product.category}
+                          stock={product.stock}
+                          created={product.created}
                         />
                       </div>
                     ))}

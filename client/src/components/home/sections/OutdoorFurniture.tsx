@@ -1,7 +1,9 @@
 "use client";
 import Image from "next/image";
 import { useState, useEffect } from "react";
-import { newArrivalsProducts } from "@/constants";
+import api from "@/utils/api";
+import { toast } from "react-toastify";
+import { Product } from "@/types/Product";
 import { motion } from "framer-motion";
 import { Button } from "../../ui/button";
 
@@ -9,10 +11,23 @@ export default function DiningRoomProduct() {
   const tabs = ["Featured Product", "Chair", "Sofa"];
   const [active, setActive] = useState(0);
   const [index, setIndex] = useState(0);
-  const products = newArrivalsProducts;
+  const [products, setProducts] = useState<Product[]>([]);
 
   // responsive items per view
   const [itemsPerView, setItemsPerView] = useState(1);
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const res = await api.get("/products");
+        setProducts(res.data);
+      } catch (err: any) {
+        toast.error(err.response?.data?.message || "Failed to load products");
+      }
+    };
+
+    fetchProducts();
+  }, []);
 
   useEffect(() => {
     const updateItemsPerView = () => {
@@ -64,7 +79,7 @@ export default function DiningRoomProduct() {
       {/* Products + Banner */}
       <div className="grid grid-cols-1 lg:grid-cols-3 md:grid-cols-3 xl:grid-cols-4 gap-6 md:gap-8">
         {/* Products Grid */}
-        <div className="lg:col-span-2 md:col-span-2 xl:col-span-3 relative">
+        <div className="lg:col-span-2 md:col-span-2 xl:col-span-3 relative ">
           <div className="overflow-hidden">
             <motion.div
               className="flex "
@@ -75,35 +90,40 @@ export default function DiningRoomProduct() {
                 (_, colIdx) => (
                   <div
                     key={colIdx}
-                    className="grid grid-rows-2 gap-8 min-w-full sm:min-w-1/2 xl:min-w-1/3"
+                    className="grid grid-rows-2 space-x-6   gap-8 min-w-full sm:min-w-1/2 xl:min-w-1/3"
                   >
                     {products
                       .slice(colIdx * 2, colIdx * 2 + 2)
                       .map((product, idx) => (
                         <div
                           key={idx}
-                          className="flex items-center text-center"
+                          className="flex items-center gap-3 sm:gap-4  w-28 h-28"
                         >
-                          <div className="relative w-24 h-24">
+                          <div className="w-24 h-28 sm:w-24 sm:h-28 flex-shrink-0 ">
                             <Image
-                              src={product.image}
+                              src={
+                                product.image
+                                  ? `http://localhost:8000${product.image}`
+                                  : "/placeholder.png"
+                              }
                               alt={product.name}
-                              fill
-                              className="object-contain"
+                              width={90}
+                              height={90}
+                              className="object-cover"
                             />
                           </div>
                           <div className="mt-1 flex flex-col">
-                            <p className="mt-2 text-base font-light font-rubik text-black text-hover hover:cursor-pointer">
+                            <p className="mt-2 text-base font-light font-rubik text-black text-hover hover:cursor-pointer line-clamp-2">
                               {product.name}
                             </p>
                             <div>
                               {product.oldprice && (
                                 <span className="text-sm font-light font-rubik text-muted line-through mr-2">
-                                  ${product.oldprice.toFixed(2)}
+                                 ₹{product.oldprice}
                                 </span>
                               )}
                               <span className="text-base font-light font-rubik text-primary">
-                                ${product.price.toFixed(2)}
+                                ₹{product.price}
                               </span>
                             </div>
                           </div>

@@ -17,7 +17,7 @@ export default function ClientTransition({
     setLoading(true);
 
     // Artificially keep it until next paint (~300ms)
-    const timeout = setTimeout(() => setLoading(false), 600);
+    const timeout = setTimeout(() => setLoading(false), 200);
     return () => clearTimeout(timeout);
   }, [pathname]);
 

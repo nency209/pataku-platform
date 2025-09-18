@@ -1,20 +1,8 @@
-export interface AccountOption
- {
-  label: string;
-  href: string;
-};
-
-export interface CurrencyOption {
-  name: string;
-  
-};
-
-
 export interface NavigationItem {
   title: string;
   href: string;
   hasDropdown?: boolean;
-  dropdownItems?: DropdownItem[] | DropdownGroup[];
+  dropdownItems?: DropdownItem[] ;
 }
 
 export interface DropdownItem {
@@ -23,10 +11,7 @@ export interface DropdownItem {
   badge?: string;
 }
 
-export interface DropdownGroup {
-  group: string;
-  items: DropdownItem[];
-}
+
 
 export interface CategoryItem {
   title: string;

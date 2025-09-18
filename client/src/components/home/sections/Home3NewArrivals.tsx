@@ -1,16 +1,31 @@
 "use client";
 import Image from "next/image";
 import ProductCard from "@/components/product/ProductCard";
-import { newArrivalsProducts } from "@/constants";
+import { Product } from "@/types/Product";
+import api from "@/utils/api";
+import { toast } from "react-toastify";
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import BrowseCategories from "./BrowserCategories";
 import { Button } from "../../ui/button";
 
 export default function Home3NewArrival() {
-  const products = newArrivalsProducts;
   const [index, setIndex] = useState(0);
-  const [visibleCols, setVisibleCols] = useState(4); // default desktop
+  const [visibleCols, setVisibleCols] = useState(4);
+  const [products, setProducts] = useState<Product[]>([]);
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const res = await api.get("/products");
+        setProducts(res.data);
+      } catch (err: any) {
+        toast.error(err.response?.data?.message || "Failed to load products");
+      }
+    };
+
+    fetchProducts();
+  }, []); // default desktop
 
   // Each column will have 2 products stacked
   const columns = Math.ceil(products.length / 2);
@@ -172,13 +187,16 @@ export default function Home3NewArrival() {
                     .map((product, idx) => (
                       <div key={idx} className="p-2">
                         <ProductCard
-                          slug={product.slug}
+                          _id={product._id}
                           name={product.name}
                           price={product.price}
-                          badges={product.badges}
+                          status={product.status}
                           image={product.image}
                           oldprice={product.oldprice}
                           discount={product.discount}
+                          category={product.category}
+                          stock={product.stock}
+                          created={product.created}
                         />
                       </div>
                     ))}

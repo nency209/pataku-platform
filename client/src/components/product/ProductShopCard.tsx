@@ -3,50 +3,45 @@ import Image from "next/image";
 import { useState } from "react";
 import { Eye, Heart, ShoppingCart } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { useDispatch } from "react-redux";
 import { addToCart } from "@/redux/cartslice";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "@/redux/store";
 import { addToWishlist } from "@/redux/wishlistslice";
-import { Products } from "@/types/Productdetails";
-
-
+import { toast } from "react-toastify";
+import { Product } from "@/types";
 
 export default function productsShopCard({
   products,
-  
-  list
+
+  list,
 }: {
-  products: Products;
- 
+  products: Product;
+
   list?: boolean;
 }) {
-  const dispatch = useDispatch();
   const router = useRouter();
   const [showPopup, setShowPopup] = useState(false);
+  const dispatch = useDispatch<AppDispatch>();
+  const user = useSelector((state: RootState) => state.user.user);
 
-  const handleAddToCart = () => {
-    dispatch(
-      addToCart({
-        slug: products.slug,
-        name: products.name,
-        price: products.price,
-        image: products.image,
-        quantity: 1,
-      })
-    );
-    setShowPopup(true);
+  const handleAddToWishlist = async () => {
+    if (!user) return toast.info("Please login first");
+    try {
+      await dispatch(addToWishlist(products._id)).unwrap();
+      toast.success("Added to wishlist!");
+    } catch (err: any) {
+      toast.error(err || "Failed to add to wishlist");
+    }
   };
 
-  const handleAddToWishlist = () => {
-    dispatch(
-      addToWishlist({
-        slug: products.slug,
-        name: products.name,
-        price: products.price,
-        
-        image: products.image,
-        
-      })
-    );
+  const handleAddToCart = () => {
+    if (!products) return;
+    try {
+      dispatch(addToCart({ productId: products._id, quantity: 1 }));
+      setShowPopup(true);
+    } catch (err: any) {
+      toast.error(err || "Failed to add to wishlist");
+    }
   };
 
   return (
@@ -59,42 +54,62 @@ export default function productsShopCard({
       <div
         className={`relative ${
           list ? "w-32 h-32" : "w-full aspect-[401/480]"
-        } group`}
+        } group `}
       >
-        <Image
-          src={products.image}
-          alt={products.name}
-          // fill={!list}
-          width={ 260}
-          height={ 250}
-          className="object-contain bg-card "
-        />
+        {list ? (
+          // 📌 List view → fixed size
+          <Image
+            src={
+              products.image
+                ? `http://localhost:8000${products.image}`
+                : "/placeholder.jpg"
+            }
+            alt={products.name}
+            width={260}
+            height={250}
+            className="object-cover  "
+          />
+        ) : (
+          // 📌 Grid view → fill inside relative container
+          <div className="relative w-full aspect-[401/480]">
+            <Image
+              src={
+                products.image
+                  ? `http://localhost:8000${products.image}`
+                  : "/placeholder.jpg"
+              }
+              alt={products.name}
+              fill
+              className="object-contain "
+            />
+          </div>
+        )}
 
         {/* Hover actions (wishlist + quickview) */}
         {!list && (
           <>
             <div className="absolute top-2 right-3 sm:right-4 flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                <button className="bg-white p-2 rounded-full shadow flex items-center justify-center">
-                  <Eye className="w-3 h-3 text-muted text-hover hover:cursor-pointer" />
-                </button>
+              <button className="bg-white p-2 rounded-full shadow flex items-center justify-center">
+                <Eye className="w-3 h-3 text-muted text-hover hover:cursor-pointer" />
+              </button>
 
-                <button
-                  onClick={handleAddToWishlist}
-                  className="bg-white p-2 rounded-full shadow flex items-center justify-center"
-                >
-                  <Heart className="w-3 h-3 text-muted text-hover hover:cursor-pointer" />
-                </button>
-              </div>
+              <button
+                onClick={handleAddToWishlist}
+                className="bg-white p-2 rounded-full shadow flex items-center justify-center"
+              >
+                <Heart className="w-3 h-3 text-muted text-hover hover:cursor-pointer" />
+              </button>
+            </div>
 
-              {/* Cart (bottom-right) */}
-              <div className="absolute bottom-1 right-3 sm:right-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                <button
-                  onClick={handleAddToCart}
-                  className="bg-white p-2 rounded-full shadow flex items-center justify-center bg-primary-hover border primary-border hover:cursor-pointer"
-                >
-                  <ShoppingCart className="w-3 h-3 text-muted hover:text-white hover:cursor-pointer" />
-                </button>
-              </div>
+            {/* Cart (bottom-right) */}
+            <div className="absolute bottom-1 right-3 sm:right-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+              <button
+                onClick={handleAddToCart}
+                className="bg-white p-2 rounded-full shadow flex items-center justify-center bg-primary-hover border primary-border hover:cursor-pointer"
+              >
+                <ShoppingCart className="w-3 h-3 text-muted hover:text-white hover:cursor-pointer" />
+              </button>
+            </div>
           </>
         )}
       </div>
@@ -106,11 +121,11 @@ export default function productsShopCard({
         </h3>
         <div className="flex items-center gap-2">
           <span className="text-base font-medium text-primary">
-            ${products.price.toFixed(2)}
+₹{products.price}
           </span>
-          {products.oldPrice && (
+          {products.oldprice && (
             <span className="line-through text-sm text-muted">
-              ${products.oldPrice.toFixed(2)}
+              ₹{products.oldprice}
             </span>
           )}
         </div>
@@ -119,17 +134,11 @@ export default function productsShopCard({
         )}
       </div>
 
-      {/* Badges + Discount */}
-      {/* {Product.badges && products.badges.length > 0 && (
-        <div className="absolute top-2 left-2 bg-black text-white px-2 text-xs">
-          {products.badges[0]}
-        </div>
-      )}
       {products.discount && (
-        <div className="absolute top-10 left-2 bg-red-500 text-white px-2 text-xs">
+        <div className="absolute top-6 left-4 bg-primary px-1 text-white font-rubik font-light text-[11px]">
           -{products.discount}%
         </div>
-      )} */}
+      )}
 
       {/* Cart popup */}
       {showPopup && (

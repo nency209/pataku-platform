@@ -2,7 +2,8 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import ClientTransition from "@/components/home/sections/ClientLayout";
-import ReduxProvider from "@/providers/ReduxProvider";
+import AppProvider from "@/provider/appprovider";
+import ReduxProvider from "@/redux/reduxprovider";
 
 export const metadata: Metadata = {
   title: "Pataku Clone",
@@ -18,7 +19,9 @@ export default function RootLayout({
     <html lang="en">
       <body suppressHydrationWarning={true}>
         <ClientTransition>
-          <ReduxProvider>{children}</ReduxProvider>
+          <ReduxProvider>
+            <AppProvider>{children}</AppProvider>
+          </ReduxProvider>
         </ClientTransition>
       </body>
     </html>

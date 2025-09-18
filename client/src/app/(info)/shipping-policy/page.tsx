@@ -1,6 +1,6 @@
-import ShippingPolicy from "@/components/pages/shipping_policy";
+import ShippingPolicy from "@/components/info/shipping_policy";
 import { shippingPolicyMetadata } from "@/constants/metadata";
-export const metadata=shippingPolicyMetadata
+export const metadata = shippingPolicyMetadata;
 
 export default function LoginHome() {
   return (

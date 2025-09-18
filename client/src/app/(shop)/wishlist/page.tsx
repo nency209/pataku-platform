@@ -1,10 +1,8 @@
-
 import { wishlistPageMetadata } from "@/constants/metadata";
-import { BrowseCategories, Navbar } from "@/components";
+import { BrowseCategories, Navbar, WishlistPage, } from "@/components";
 import { NavigationIndex, Header, Footer } from "@/layout";
-import WishlistPage from "@/components/pages/wishlist";
 
-export const metadata=wishlistPageMetadata
+export const metadata = wishlistPageMetadata;
 
 export default function NewSaleProductPage() {
   return (
@@ -26,7 +24,8 @@ export default function NewSaleProductPage() {
         </div>
       </div>
       <NavigationIndex />
-      <WishlistPage />
+      <WishlistPage/>
+      
 
       <Footer />
     </main>

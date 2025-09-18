@@ -5,8 +5,7 @@ export default function ProductTabs() {
   const [activeTab, setActiveTab] = useState("description");
 
   return (
-    
-       <div className="mx-auto xl:max-w-6xl lg:max-w-4xl md:max-w-2xl px-4 sm:px-6 lg:px-0 py-6">
+    <div className="mx-auto xl:max-w-6xl lg:max-w-4xl md:max-w-2xl px-4 sm:px-6 lg:px-0 py-6">
       {/* Tabs */}
       <div className="flex bg-header justify-center ">
         <button
@@ -67,7 +66,9 @@ export default function ProductTabs() {
           <p className="text-[32px] font-bold font-lato text-black mb-2">
             Customer reviews
             <br></br>
-            <span className="text-xs font-light font-lato  mb-2">Based on 2 reviews Write a review</span>
+            <span className="text-xs font-light font-lato  mb-2">
+              Based on 2 reviews Write a review
+            </span>
           </p>
         )}
         {activeTab === "comments" && (

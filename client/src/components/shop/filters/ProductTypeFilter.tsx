@@ -1,27 +1,53 @@
-const productTypes = ["Chair", "Deals Product", "Featured Product"];
+"use client";
+import { useEffect, useState } from "react";
+import api from "@/utils/api"; // axios wrapper
+import { Product } from "@/types";
 
-export default function ProductTypeFilter({ filters, setFilters }: any) {
-  const toggleType = (type: string) => {
+export default function CategoryFilter({ filters, setFilters }: any) {
+  const [categories, setCategories] = useState<string[]>([]);
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        // Fetch all products
+        const res = await api.get("/products");
+        const products: Product[] = res.data;
+
+        // Extract unique categories
+        const uniqueCategories = [
+          ...new Set(products.map((p) => p.category)),
+        ].filter(Boolean);
+
+        setCategories(uniqueCategories);
+      } catch (err) {
+        console.error("Error fetching categories:", err);
+      }
+    };
+
+    fetchCategories();
+  }, []);
+
+  const toggleCategory = (category: string) => {
     setFilters((f: any) => ({
       ...f,
-      productType: f.productType.includes(type)
-        ? f.productType.filter((t: string) => t !== type)
-        : [...f.productType, type],
+      category: f.category.includes(category)
+        ? f.category.filter((c: string) => c !== category)
+        : [...f.category, category],
     }));
   };
 
   return (
     <div className="border border-color flex flex-col justify-center items-center space-y-2 py-6">
-      <h4 className="font-medium font-rubik text-xl  ">Product Type</h4>
+      <h4 className="font-medium font-rubik text-xl">Category</h4>
       <div className="space-y-2 text-sm font-rubik text-muted">
-        {productTypes.map((t) => (
-          <label key={t} className="flex items-center gap-2">
+        {categories.map((c) => (
+          <label key={c} className="flex items-center gap-2">
             <input
               type="checkbox"
-              checked={filters.productType.includes(t)}
-              onChange={() => toggleType(t)}
+              checked={filters.category.includes(c)}
+              onChange={() => toggleCategory(c)}
             />
-            {t}
+            {c}
           </label>
         ))}
       </div>
