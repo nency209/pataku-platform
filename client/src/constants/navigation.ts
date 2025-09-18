@@ -1,23 +1,5 @@
-import { NavigationItem ,AccountOption,CurrencyOption} from "@/types";
+import { NavigationItem } from "@/types";
 
-
-export const accountOptions: AccountOption[] = [
-  { label: "Login", href: "/login" },
-  { label: "Register", href: "/Register" },
-  { label: "Wishlist", href: "/wishlist" },
-  { label: "Cart", href: "/cart" },
-];
-
-export const currencyOptions: CurrencyOption[] = [
-  { name: "USD - US Dollar", },
-  { name: "EUR - Euro",  },
-  { name: "GBP - British Pound",},
-  { name: "INR - Indian Rupee", },
-  { name: "BDT - Bangladesh Taka",},
-  { name: "JPY - Japan Yen", },
-  { name: "CAD - Canada Dollar",  },
-  { name: "AUD - Australian Dollar", }
-];
 
 
 export const navigationItems: NavigationItem[] = [

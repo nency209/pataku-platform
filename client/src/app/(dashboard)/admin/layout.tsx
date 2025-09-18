@@ -48,9 +48,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
             localStorage.removeItem("user");
             router.push("/login");
           }}
-          onUpdateUser={(data: Partial<typeof user>) =>
-            console.log("Update user", data)
-          }
+          
         />
 
         {/* Page Content */}
