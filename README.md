@@ -1,164 +1,125 @@
-Pataku - Full-Stack E-Commerce Platform
-Pataku is a feature-rich, full-stack e-commerce application designed to provide a seamless shopping experience. It features a modern, responsive frontend built with Next.js and a powerful backend powered by Node.js, Express, and MongoDB. The platform includes a complete suite of functionalities for both customers and administrators, from product browsing and secure payments to advanced dashboard analytics and real-time updates.
+🛋️ Pataku - Full-Stack E-Commerce Platform
 
-Live Demo
-A live, deployed version of the application can be accessed here.
+Pataku is a modern, full-stack e-commerce platform built for a seamless online shopping experience.
+Think of it as a furniture store in your pocket – with smooth browsing, secure payments, and a powerful admin dashboard to manage everything.
 
-Screenshots
-Homepage showcasing multiple layouts and featured products.
 
-Admin dashboard with KPIs, revenue charts, and real-time order updates.
+📖 Project Overview
 
-Shop page with advanced filtering options for a seamless user experience.
+Pataku is more than just an online store.
+It includes everything needed for customers and administrators:
 
-Table of Contents
-Live Demo
+A beautiful shopping experience for customers (browse, wishlist, cart, checkout).
 
-Screenshots
+A powerful admin panel (analytics, product management, real-time updates).
 
-Project Overview
+A scalable backend ready for modern e-commerce needs.
 
-Key Features
+✨ Key Features
+👩‍💻 Customer Features
 
-Tech Stack & Skills
+🔐 Secure Authentication – Register/Login with JWT.
 
-Project Structure
+🏠 Dynamic Homepage – Multiple layouts to showcase categories.
 
-API Endpoints
+🔎 Smart Filtering – Browse products by price, category, and availability.
 
-Getting Started
+📦 Product Details – Rich product pages with image galleries.
 
-Environment Variables
+🛒 Cart & Wishlist – Save, update, or remove items easily.
 
-Future Enhancements
+💳 Secure Payments – Razorpay integration for checkout.
 
-Project Overview
-Pataku is a sophisticated online furniture store with multiple home page variations, a complete shopping funnel (product listings, cart, checkout), user authentication, and a comprehensive admin dashboard for managing the entire store. The architecture is designed to be scalable and performant, utilizing modern web development practices and tools.
+📜 Order History – Track past purchases & update profile.
 
-Key Features
-Customer-Facing Features:
-User Authentication: Secure user registration and login using JWT.
+🛠️ Admin Features
 
-Dynamic Homepage: Multiple homepage layouts to showcase products and categories.
+📊 Analytics Dashboard – See KPIs like sales, orders, and revenue.
 
-Product Browsing & Filtering: Advanced filtering by availability, price, and category.
+🛍️ Product Management – Full CRUD with image uploads.
 
-Product Details Page: In-depth product information, image galleries, and related products.
+📦 Order Management – Track and update customer orders.
 
-Shopping Cart: Add, update, and remove items from the cart with persistent state.
+👤 User Management – Manage registered users.
 
-Wishlist: Save favorite products for later.
+🔔 Real-Time Updates – Live notifications for orders and stock alerts (Socket.IO).
 
-Secure Checkout: Integrated with Razorpay for a smooth and secure payment process.
-
-Order History & Profile Management: Users can view their past orders and update their profile information, including their avatar.
-
-Admin Panel Features:
-Analytics Dashboard: At-a-glance view of key performance indicators (KPIs) like sales, orders, and revenue charts.
-
-Product Management: Full CRUD (Create, Read, Update, Delete) functionality for products, including image uploads.
-
-Order Management: View and manage all customer orders.
-
-User Management: View and manage all registered users.
-
-Real-Time Updates: Live notifications for new orders and low-stock alerts via Socket.IO.
-
-Tech Stack & Skills
-This project showcases a wide range of modern web development skills and technologies.
-
+🛠️ Tech Stack
 Frontend
-Framework: Next.js & React
 
-Language: TypeScript
+⚛️ Next.js + React + TypeScript
 
-State Management: Redux Toolkit (for centralized state management of cart, user, etc.)
+🎨 Tailwind CSS + Shadcn/UI for UI
 
-Styling: Tailwind CSS with Shadcn/UI for pre-built, accessible components.
+🌀 Framer Motion for animations
 
-UI/UX: Framer Motion for animations, Embla Carousel for sliders.
+🎠 Embla Carousel for sliders
 
-Data Fetching: Axios with interceptors for streamlined API communication.
+🗂️ Redux Toolkit for state management
 
-Forms: Formik and Yup for robust form handling and validation.
+📡 Axios for API communication
+
+📝 Formik + Yup for forms
 
 Backend
-Runtime: Node.js
 
-Framework: Express.js
+🚀 Node.js + Express
 
-Database: MongoDB with Mongoose for object data modeling.
+🗄️ MongoDB + Mongoose for database
 
-Authentication: JSON Web Tokens (JWT) for secure, stateless authentication.
+🔐 JWT Authentication
 
-File Uploads: Multer for handling image uploads.
+📂 Multer for file uploads
 
-Real-Time Communication: Socket.IO for live dashboard updates.
+🔔 Socket.IO for live updates
 
-Caching: Redis to cache frequently accessed data like products and user carts, reducing database load.
+⚡ Redis for caching (fast product & cart loading)
 
-Payment Gateway: Razorpay integration for processing payments.
+💳 Razorpay for payments
 
-Email Service: Nodemailer for sending order confirmation emails.
+📧 Nodemailer for order emails
 
 Deployment
-Frontend: Vercel
 
-Backend: Render (or any similar service like Heroku)
+🌍 Frontend – Vercel
 
-Database: MongoDB Atlas
+🔙 Backend – Render (or similar like Heroku)
 
-Caching: Redis Cloud
+🗄️ Database – MongoDB Atlas
 
+⚡ Cache – Redis Cloud
 
-
-Getting Started
-Follow these steps to set up and run the project on your local machine.
-
+🚀 Getting Started
 Prerequisites
-Node.js (v18 or later)
+
+Node.js (v18+)
 
 npm or yarn
 
-MongoDB (local instance or cloud service like MongoDB Atlas)
+MongoDB (local or Atlas)
 
-Redis (local instance or cloud service like Redis Cloud)
+Redis (local or Redis Cloud)
 
 Installation
-Clone the repository:
-
+# Clone the repo
 git clone <your-repo-url>
-cd <project-directory>
+cd pataku
 
-Install backend dependencies:
-
+# Install backend deps
 npm install
 
-Install frontend dependencies:
-
-# (Already installed with the command above if in the same package.json)
-# If separate, cd into the 'src' or frontend directory and run npm install
+# Install frontend deps (if separate)
+cd src
+npm install
 
 Configuration
-Create a .env file in the root of the project for the backend.
 
-Create a .env.local file in the src folder for the frontend.
+Create .env for backend
 
-Populate these files with the necessary credentials (see Environment Variables).
-
-Start the backend server:
-
-npm run dev # Or your configured start script
-
-Start the frontend development server:
-
-# This command is usually run from the root directory as well
-npm run dev
-
-Environment Variables
-You will need to create .env (backend) and .env.local (frontend) files and add the following variables.
+Create .env.local in src for frontend
 
 Backend (.env)
+
 MONGO_URL=your_mongodb_connection_string
 JWT_SECRET=your_jwt_secret_key
 REDIS_URL=your_redis_connection_string
@@ -168,7 +129,16 @@ LOGIN=your_nodemailer_login_email
 PASS=your_nodemailer_password
 PORT=8000
 
+
 Frontend (src/.env.local)
+
 NEXT_PUBLIC_API_URL=http://localhost:8000/api
 NEXT_PUBLIC_RAZORPAY_KEY_ID=your_razorpay_key_id
 NEXT_PUBLIC_GOOGLE_MAPS_API_KEY=your_google_maps_api_key
+
+Run the project
+# Start backend
+npm run dev
+
+# Start frontend
+npm run dev
