@@ -1,6 +1,36 @@
 Pataku - Full-Stack E-Commerce Platform
 Pataku is a feature-rich, full-stack e-commerce application designed to provide a seamless shopping experience. It features a modern, responsive frontend built with Next.js and a powerful backend powered by Node.js, Express, and MongoDB. The platform includes a complete suite of functionalities for both customers and administrators, from product browsing and secure payments to advanced dashboard analytics and real-time updates.
 
+Live Demo
+A live, deployed version of the application can be accessed here.
+
+Screenshots
+Homepage showcasing multiple layouts and featured products.
+
+Admin dashboard with KPIs, revenue charts, and real-time order updates.
+
+Shop page with advanced filtering options for a seamless user experience.
+
+Table of Contents
+Live Demo
+
+Screenshots
+
+Project Overview
+
+Key Features
+
+Tech Stack & Skills
+
+Project Structure
+
+API Endpoints
+
+Getting Started
+
+Environment Variables
+
+Future Enhancements
 
 Project Overview
 Pataku is a sophisticated online furniture store with multiple home page variations, a complete shopping funnel (product listings, cart, checkout), user authentication, and a comprehensive admin dashboard for managing the entire store. The architecture is designed to be scalable and performant, utilizing modern web development practices and tools.
@@ -70,6 +100,16 @@ Caching: Redis to cache frequently accessed data like products and user carts, r
 Payment Gateway: Razorpay integration for processing payments.
 
 Email Service: Nodemailer for sending order confirmation emails.
+
+Deployment
+Frontend: Vercel
+
+Backend: Render (or any similar service like Heroku)
+
+Database: MongoDB Atlas
+
+Caching: Redis Cloud
+
 
 
 Getting Started
